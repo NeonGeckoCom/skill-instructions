@@ -7,3 +7,4 @@ soundfile
 pyttsx3
 playsound
 wavfile
+word2number

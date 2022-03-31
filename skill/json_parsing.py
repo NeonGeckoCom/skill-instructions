@@ -44,6 +44,9 @@ class JsonParsing:
           json_list = list(json_file)
           self.json_list = json_list
 
+    def remember(self, id, answer):
+      self.ANSWERS.append([id, answer])
+
     def execute(self):
         answer_list = []
         answer = 1
@@ -71,3 +74,4 @@ class JsonParsing:
 ANSWERS = []
 path = '/content/drive/MyDrive/Polish_STT/demo2_pl.jsonl'
 parser = JsonParsing(path, 'en')
+
