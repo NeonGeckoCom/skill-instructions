@@ -44,7 +44,7 @@ class Check:
     def replace_question(self, prev_answer, question):
         '''
         replaces the word REPLACE in the question
-        with the word wrom previouse user's answer
+        with the word from previouse user's answer
         '''
         print(str(prev_answer))
         new_question = re.sub('REPLACE', str(prev_answer), str(question))

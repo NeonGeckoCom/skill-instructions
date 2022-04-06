@@ -1,7 +1,6 @@
 json
-re
 neon-stt-plugin-polyglot
-git+https://github.com/NeonGeckoCom/neon-tts-plugin-coqui-ai.git@initial-implementation
+neon-tts-plugin-coqui-ai
 sounddevice
 soundfile
 pyttsx3

@@ -47,6 +47,39 @@ class JsonParsing:
     def remember(self, id, answer):
       self.ANSWERS.append([id, answer])
 
+    def conversation(self, json_list, id, prev_answer):
+        for json_str in json_list:
+            result = json.loads(json_str)
+            if int(result['qa_id']) == id:
+                if (id == 6) or (id == 12):
+                    text = replace_question(id, prev_answer, result['question'])
+                    t = call_tts(text, str(id))
+                else:
+                    t = call_tts(result['question'], str(id))
+                if result['answerable'] == "True":
+                    memfile = recording(t)
+                    answer_words = call_stt(memfile)
+                    if 'script' in result['answer'].keys():
+                        if id == 2:
+                            return answer_range(int(id), answer_words)
+                        elif id == 3:
+                            return even_number(int(id), answer_words)
+                        elif id == 5:
+                            return is_number(int(id), answer_words)
+                        elif id == 8:
+                            return not_empty(int(id), answer_words)
+                        elif id == 10:
+                            return check_answer(ANSWERS, int(id), answer_words)
+                    else:
+                        answer_words = answer_words.split(' ')
+                        exist = [word for word in answer_words if word in result['answer'].keys()]
+                        if len(exist) != 0:
+                            id = result['answer'][exist[0]]
+                            return id, ' '.join(answer_words)
+                        else:
+                            print(call_tts('Repeat, please.', str(id)))
+                            return id, ' '.join(answer_words)
+
     def execute(self):
         answer_list = []
         answer = 1

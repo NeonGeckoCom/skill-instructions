@@ -1,0 +1,13 @@
+{"qa_id": "1", "question": "Please tell me about this sewing machine. Is it a quilter?", "answerable": "True", "answer":  {"yes": 2}}
+{"qa_id": "2", "question": "Is it a long arm machine, or short arm?", "answerable": "True", "answer":  {"long": 3}}
+{"qa_id": "3", "question": "Is its carriage working or broken?", "answerable": "True", "answer":  {"broken": 4}}
+{"qa_id": "4", "question": "Is its encoder old or new?", "answerable": "True", "answer":  {"old": 5}}
+{"qa_id": "5", "question": "Remove the old encoder by turning the nut off counterclockwise. Remove the encoder, washers, spring and mounting screw. Tell me when you have done that.", "answerable": "True", "answer":  {"done": 6}}
+{"qa_id": "6", "question": "How many parts did you remove?", "answerable": "True", "answer":  {"five": 7}}
+{"qa_id": "7", "question": "Now install the new Encoder. Thread the new mounting screw into the cross member from inside out then tighten firmly. Is it tight?", "answerable": "True", "answer":  {"tight": 8}}
+{"qa_id": "8", "question": "Now place the carriage wheel on the end of the mounting screw, thread on the jam nut and tighten firmly. Is it tight or still loose?", "answerable": "True", "answer":  {"tight": 10, "loose": 9, "yes": 10}}
+{"qa_id": "9", "question": "repeat 8", "answerable": "False"}
+{"qa_id": "10", "question": "Is its stop carriage a bent one or a straight one?", "answerable": "True", "answer":  {"bent": 11, "no": 12, "straight": 12}}
+{"qa_id": "11",	"question": "You will need to use the shorter spring for a bent one.", "answerable": "True", "answer":  {"ok": 13, "okay":13}}
+{"qa_id": "12", "question": "You will need to use the straight spring on the straight carriage.", "answerable": "True",  "answer":  {"ok": 13, "okay":13}}
+{"qa_id": "13", "question": "Do you have another page in this manual?", "answerable": "True", "answer":  {"yes": 0, "no": 0}}
