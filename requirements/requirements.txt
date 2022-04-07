@@ -1,5 +1,4 @@
 ovos-lingua-franca>=0.4.4a2
-
 neon-stt-plugin-polyglot
 neon-tts-plugin-coqui
 sounddevice
