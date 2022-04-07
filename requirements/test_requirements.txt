@@ -2,3 +2,4 @@ pytest
 mock
 ovos_utils
 neon_utils
+mycroft

@@ -36,7 +36,7 @@ from mock import Mock
 from ovos_utils.messagebus import FakeBus
 from neon_utils.configuration_utils import get_neon_local_config, get_neon_user_config
 
-# from mycroft.skills.skill_loader import SkillLoader
+from mycroft.skills.skill_loader import SkillLoader
 
 
 class TestSkill(unittest.TestCase):
