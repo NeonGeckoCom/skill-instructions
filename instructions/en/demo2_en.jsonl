@@ -1,5 +1,5 @@
 {"qa_id": "1", "question": "Before beginning this procedure, check fuse 24. Is it intact?", "answerable": "True", "answer":  {"yes": 2}}
-{"qa_id": "2", "question": "Refer to the wiring diagram before the next step. How many wires do you see connected to the terminal? ", "answerable": "True", "answer":  {"script": 3}}
+{"qa_id": "2", "question": "Refer to the wiring diagram before the next step. How many wires do you see connected to the terminal? ", "answerable": "True", "answer":  {"answer_num_range": 3}}
 {"qa_id": "3", "question": "That’s enough. How many of them are blue?", "answerable": "True", "answer":  {"script": 4}}
 {"qa_id": "4", "question": "For this wire model, make sure that the probe system and connections to the machine are functioning correctly, then turn it off. Use gloves and two hands to control the apparatus. Is the axle still rotating?", "answerable": "True", "answer":  {"no": 5}}
 {"qa_id": "5", "question": "Insert the round gasket into the top device. What is the inside diameter of the first pipe?", "answerable": "True", "answer":  {"script": 6}}

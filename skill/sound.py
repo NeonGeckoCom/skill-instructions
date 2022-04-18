@@ -39,7 +39,7 @@ class Audio:
 
     def __init__(self, lang):
         self.samplerate = 16000
-        self.rec_duration = 3 #recording seconds
+        self.rec_duration = 4 #recording seconds
         self.filemane = 'output.wav'
         self.lang = lang or 'en'
 
@@ -60,9 +60,9 @@ class Audio:
         # calculate the wav file lenght (seconds)
         Fs, data = wavfile.read(file)
         n = data.size
-        t = n / Fs
-        print("waiting time: ", t)
-        return t
+        time_wait = n / Fs
+        print("waiting time before listening to user's answer: ", time_wait)
+        return time_wait
 
     def call_tts_pyttsx3(self, text, id):
         '''
@@ -82,14 +82,56 @@ class Audio:
             engine.setProperty('voice', "polish")
         engine.save_to_file(text, file_name)
         # time.sleep(5)
-        t = Audio.calculate_audio_length(file_name)
+        time_wait = Audio.calculate_audio_length(file_name)
         playsound(file_name) #play audio
         engine.stop() #stop pyttsx3 engine
+        return time_wait
 
-    def call_tts_qocui(self, text, id):
-        file_name = 'audio' + id + '.wav'
+    def call_tts_qocui(self, text, question_id):
+        file_name = 'audio' + question_id + '.wav'
         coquiTTS = CoquiTTS(self.lang)
         coquiTTS.get_tts(text, file_name)
-        t = Audio.calculate_audio_length(file_name)
+        time_wait = Audio.calculate_audio_length(file_name)
         playsound(file_name)
+        return time_wait
+
+    def repeat(self, question_id):
+        if self.lang == 'en':
+            text = 'Repeat, please'
+            self.call_tts_qocui(self, text, question_id)
+        elif self.lang == 'pl':
+            text = 'Powtórz, proszę..'
+            self.call_tts_qocui(self, text, question_id)
+        else:
+            text = 'Повторіть, будь-ласка.'
+            self.call_tts_qocui(self, text, question_id)
+
+    def no_instructions(self):
+        if self.lang == 'en':
+            text = 'No instructions for this case.'
+            question_id = '0'
+            self.call_tts_qocui(self, text, question_id)
+        elif self.lang == 'pl':
+            text = 'Brak struktury dla tej sprawy.'
+            question_id = '0'
+            self.call_tts_qocui(self, text, question_id)
+        else:
+            text = 'Немає інструкцій для цього випадку.'
+            question_id = '0'
+            self.call_tts_qocui(self, text, question_id)
+
+    def finish(self):
+        if self.lang == 'en':
+            text = 'Finished'
+            question_id = '0'
+            self.call_tts_qocui(self, text, question_id)
+        elif self.lang == 'pl':
+            text = 'Skończone'
+            question_id = '0'
+            self.call_tts_qocui(self, text, question_id)
+        else:
+            text = 'Закінчили'
+            question_id = '0'
+            self.call_tts_qocui(self, text, question_id)
+
 

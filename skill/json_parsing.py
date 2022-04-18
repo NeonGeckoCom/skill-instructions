@@ -30,81 +30,65 @@ import json
 import re
 import os
 from sound import Audio
+from answer_checks import Check
 
 
-class JsonParsing:
-    def __init__(self, json_path):
+class JsonParser:
+    def __init__(self, json_path, lang):
+        self.Audio = Audio(lang)
         self.json_path = json_path
-        self.json_list = None
         self._ANSWERS = [] #all user's answers during the session
+        self.Check = None
 
 
     def json_reading(self):
       with open(self.json_path, 'r') as json_file:
           json_list = list(json_file)
-          self.json_list = json_list
+          return json_list
 
-    def remember(self, id, answer):
-      self.ANSWERS.append([id, answer])
-
-    def conversation(self, json_list, id, prev_answer):
+    def conversation(self, json_list, question_id, prev_answer, answer_list):
         for json_str in json_list:
             result = json.loads(json_str)
-            if int(result['qa_id']) == id:
-                if (id == 6) or (id == 12):
-                    text = replace_question(id, prev_answer, result['question'])
-                    t = call_tts(text, str(id))
+            if int(result['qa_id']) == question_id:
+
+                # creating class veriable for using check functions
+                self.Check = Check(question_id, prev_answer, result['question'])
+
+                if 'REPLACE' in result['question']:
+                # inserting user's previous answer into the question
+                    text = self.Check.replace_question()
+                    waiting_time = self.Audio.call_tts_qocui(text, question_id)
                 else:
-                    t = call_tts(result['question'], str(id))
+                    waiting_time = self.Audio.call_tts_qocui(result['question'], question_id)
+
+                # listening to user's answer
                 if result['answerable'] == "True":
-                    memfile = recording(t)
-                    answer_words = call_stt(memfile)
-                    if 'script' in result['answer'].keys():
-                        if id == 2:
-                            return answer_range(int(id), answer_words)
-                        elif id == 3:
-                            return even_number(int(id), answer_words)
-                        elif id == 5:
-                            return is_number(int(id), answer_words)
-                        elif id == 8:
-                            return not_empty(int(id), answer_words)
-                        elif id == 10:
-                            return check_answer(ANSWERS, int(id), answer_words)
+                    # creating a wav file with the user's answer
+                    memfile = self.Audio.recording(waiting_time)
+                    # recognizing words from wav file
+                    answer_words = self.Audio.call_stt(memfile)
+                    # checking for script in the answer variants
+                    if 'answer_num_range' in result['answer'].keys():
+                        return self.Check.answer_num_range(answer_words)
+                    elif 'is_even_number' in result['answer'].keys():
+                        return self.Check.is_even_number(answer_words)
+                    elif 'is_number' in result['answer'].keys():
+                        return self.Check.is_number(answer_words)
+                    elif 'not_empty' in result['answer'].keys():
+                        return self.Check.not_empty(answer_words)
+                    elif 'check_answer' in result['answer'].keys():
+                        return self.Check.check_answer(answer_list, answer_words)
+                    # checking for existence of words in user's answer in correct answer
                     else:
                         answer_words = answer_words.split(' ')
                         exist = [word for word in answer_words if word in result['answer'].keys()]
+                        # return question id from json file
                         if len(exist) != 0:
-                            id = result['answer'][exist[0]]
-                            return id, ' '.join(answer_words)
+                            question_id = result['answer'][exist[0]]
+                            return question_id, ' '.join(answer_words)
+                        # ask to repeat the question and return current question id
                         else:
-                            print(call_tts('Repeat, please.', str(id)))
-                            return id, ' '.join(answer_words)
+                            self.Audio.repeat(question_id)
+                            return question_id, ' '.join(answer_words)
 
-    def execute(self):
-        answer_list = []
-        answer = 1
-        prev_words = ' '
-        while int(answer) != 0:
-            if (len(answer_list) >= 3) and (answer_list[-3] == answer) and (answer != None):
-                if self.lang == 'en':
-                    call_tts('No instructure for this case.', '0')
-                elif self.lang == 'pl':
-                    call_tts('Brak struktury dla tej sprawy.', '0')
-                break
-            else:
-                result = conversation(self.json_list, answer, prev_words)
-                answer = result[0]
-                prev_words = result[1]
-                remember(answer - 1, prev_words)
-                answer_list.append(answer)
-                print(ANSWERS)
-        else:
-            if self.lang == 'en':
-                call_tts('Finished', '0')
-            elif self.lang == 'pl':
-                call_tts('Skończone', '0')
-
-ANSWERS = []
-path = '/content/drive/MyDrive/Polish_STT/demo2_pl.jsonl'
-parser = JsonParsing(path, 'en')
 
