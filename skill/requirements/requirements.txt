@@ -1,5 +1,6 @@
 word2number
 numpy
+ovos-core
 ovos-lingua-franca>=0.4.4a2
 neon-stt-plugin-polyglot
 neon-tts-plugin-coqui
@@ -7,4 +8,3 @@ sounddevice
 pyttsx3
 playsound
 wavfile
-word2number

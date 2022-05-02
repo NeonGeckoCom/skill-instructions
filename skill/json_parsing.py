@@ -27,46 +27,45 @@
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import json
-import re
-import os
-from sound import Audio
+from threading import Event
+
+# from sound import Audio
 from answer_checks import Check
+from neon_utils.skills.neon_skill import NeonSkill
 
 
-class JsonParser:
-    def __init__(self, json_path, lang):
-        self.Audio = Audio(lang)
+class JsonParser(NeonSkill):
+    def __init__(self, json_path: str, lang: str):
+        '''
+        lang: ISO 639-1
+        '''
+        # self.Audio = Audio(bus, lang)
         self.json_path = json_path
-        self._ANSWERS = [] #all user's answers during the session
         self.Check = None
-
 
     def json_reading(self):
       with open(self.json_path, 'r') as json_file:
           json_list = list(json_file)
           return json_list
 
+
     def conversation(self, json_list, question_id, prev_answer, answer_list):
         for json_str in json_list:
             result = json.loads(json_str)
-            if int(result['qa_id']) == question_id:
-
+            if result['qa_id'] == question_id:
                 # creating class veriable for using check functions
-                self.Check = Check(question_id, prev_answer, result['question'])
-
-                if 'REPLACE' in result['question']:
-                # inserting user's previous answer into the question
-                    text = self.Check.replace_question()
-                    waiting_time = self.Audio.call_tts_qocui(text, question_id)
-                else:
-                    waiting_time = self.Audio.call_tts_qocui(result['question'], question_id)
+                self.Check = Check(question_id, prev_answer, result['question'], json_list)
 
                 # listening to user's answer
+                # recognizing words from wav file
                 if result['answerable'] == "True":
-                    # creating a wav file with the user's answer
-                    memfile = self.Audio.recording(waiting_time)
-                    # recognizing words from wav file
-                    answer_words = self.Audio.call_stt(memfile)
+                    # inserting user's previous answer into the question
+                    if 'REPLACE' in result['question']:
+                        text = self.Check.replace_question()
+                        answer_words = self.get_response(text)
+                    else:
+                        answer_words = self.get_response(result['question'])
+                
                     # checking for script in the answer variants
                     if 'answer_num_range' in result['answer'].keys():
                         return self.Check.answer_num_range(answer_words)
@@ -77,7 +76,7 @@ class JsonParser:
                     elif 'not_empty' in result['answer'].keys():
                         return self.Check.not_empty(answer_words)
                     elif 'check_answer' in result['answer'].keys():
-                        return self.Check.check_answer(answer_list, answer_words)
+                        return self.Check.check_answer(answer_words, answer_list)
                     # checking for existence of words in user's answer in correct answer
                     else:
                         answer_words = answer_words.split(' ')
@@ -85,10 +84,19 @@ class JsonParser:
                         # return question id from json file
                         if len(exist) != 0:
                             question_id = result['answer'][exist[0]]
-                            return question_id, ' '.join(answer_words)
+                            return str(question_id), ' '.join(answer_words)
                         # ask to repeat the question and return current question id
                         else:
-                            self.Audio.repeat(question_id)
-                            return question_id, ' '.join(answer_words)
+                            self.speak('Repeat, please')
+                            return str(question_id), ' '.join(answer_words)
+                else:
+                    if 'REPLACE' in result['question']:
+                    # inserting user's previous answer into the question
+                        text = self.Check.replace_question()
+                        self.speak(text)
+                        return str(question_id+1), prev_answer
+                    else:
+                        self.speak(result['question'])
+                        return str(question_id+1), prev_answer
 
 

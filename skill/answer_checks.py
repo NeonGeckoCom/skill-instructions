@@ -30,22 +30,25 @@ from word2number import w2n
 import re
 
 class Check:
-    def __init__(self, question_id, prev_answer, question):
+    # to do: add docstrings
+    def __init__(self, question_id: int, prev_answer: str, question: str, answer_list: list):
         self.question_id = question_id
         self.prev_answer = prev_answer
         self.question = question
+        self.answer_list = answer_list
 
-    def answer_num_range(self, answer, minimum: int, maximum: int):
+    # to do: substitute prints
+    def answer_num_range(self, answer: str):
       try:
           numbers = w2n.word_to_num(answer)
           print('numbers:', numbers)
-          if numbers >= minimum and numbers <= maximum:
+          if numbers >= 1 and numbers <= 10:
             return self.question_id+1, numbers
       except ValueError:
           print('no numbers in the answer')
           return self.question_id, answer
 
-    def is_even_number(self, answer):
+    def is_even_number(self, answer: str):
       try:
           numbers = w2n.word_to_num(answer)
           if numbers >= 2 and (numbers % 2) == 0:
@@ -54,21 +57,21 @@ class Check:
             return self.question_id, numbers
       except ValueError:
           print('no numbers in the answer')
-          return id, answer
+          return self.question_id, answer
 
-    def is_number(self, id, answer):
+    def is_number(self, answer: str):
       try:
           numbers = w2n.word_to_num(answer)
-          return id+1, numbers
+          return self.question_id+1, numbers
       except ValueError:
           print('no numbers in the answer')
-          return id, answer
+          return self.question_id, answer
 
-    def not_empty(self, id, answer):
+    def not_empty(self, answer: str):
       if str(answer) != '':
-            return id+1, answer
+            return self.question_id+1, answer
       else:
-            return id, answer
+            return self.question_id, answer
 
     def replace_question(self):
         '''
@@ -79,16 +82,17 @@ class Check:
         new_question = re.sub('REPLACE', str(self.prev_answer), str(self.question))
         return new_question
 
-    def check_answer(self, ANSWERS, id, answer):
+    def check_answer(self, answer: str):
       try:
+          answer_2 = 1
           numbers = w2n.word_to_num(answer)
-          for answer in ANSWERS:
+          for answer in self.answer_list:
             if answer[0] == 2:
               answer_2 = answer[1]/2
           if numbers == answer_2:
-            return id+1, numbers
+            return self.question_id+1, numbers
           else:
-            return id+2, numbers
+            return self.question_id+2, numbers
       except ValueError:
           print('no numbers in the answer')
-          return id+2, answer
+          return self.question_id+2, answer

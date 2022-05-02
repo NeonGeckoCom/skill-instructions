@@ -25,34 +25,44 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+from neon_utils.skills.neon_skill import NeonSkill
 import re
 import sounddevice as sd
 import soundfile as sf
-import playsound
 import wavfile
 from neon_tts_plugin_coqui_ai import CoquiTTS
 from neon_stt_plugin_polyglot import PolyglotSTT
 import pyttsx3
+import time
 
-class Audio:
 
-    def __init__(self, lang):
+# import required module
+import os
+
+
+class Audio(NeonSkill):
+
+    def __init__(self, bus, lang):
+        super().__init__(name='Audio', bus=bus)
         self.samplerate = 16000
         self.rec_duration = 4 #recording seconds
-        self.filemane = 'output.wav'
+        self.filename = 'output.wav'
         self.lang = lang or 'en'
+    #
+    # def communication(self,  text, question_id):
+    #     answer = self.get_response(text)
+    #     return
 
-
-    def recording(self):
+    def recording(self, t):
+        time.sleep(t)
 
         mydata = sd.rec(int(self.samplerate * self.rec_duration), samplerate=self.samplerate,
-                        channels=1, blocking=True)
+                        channels=2, blocking=True)
         sf.write(self.filename, mydata, self.samplerate)
 
     def call_stt(self):
         stt = PolyglotSTT(self.lang)
-        result = stt.execute(self.filemane)
+        result = stt.execute(self.filename)
         answer_no_punct = re.sub('[^0-9a-zA-Z\s]+', '', result.lower())
         return answer_no_punct
 
@@ -83,7 +93,7 @@ class Audio:
         engine.save_to_file(text, file_name)
         # time.sleep(5)
         time_wait = Audio.calculate_audio_length(file_name)
-        playsound(file_name) #play audio
+        os.system("mpg123 " + file_name) #play audio
         engine.stop() #stop pyttsx3 engine
         return time_wait
 
@@ -92,7 +102,7 @@ class Audio:
         coquiTTS = CoquiTTS(self.lang)
         coquiTTS.get_tts(text, file_name)
         time_wait = Audio.calculate_audio_length(file_name)
-        playsound(file_name)
+        os.system("mpg123 " + file_name) #play audio
         return time_wait
 
     def repeat(self, question_id):
