@@ -5,12 +5,12 @@ from json_parsing import JsonParser
 from neon_utils.skills.neon_skill import NeonSkill
 
 
-class InstructionRunner(NeonSkill):
+class InstructionRunner():
 
-    def __init__(self, json_path: str, lang: str):
-        self.lang = lang or 'en'
+    def __init__(self, json_path):
+        self.lang = 'en'
         self.json_path = json_path
-        self.JsonParser = JsonParser(self.json_path, self.lang)
+        self.JsonParser = JsonParser(self.json_path)
         self.json_list = self.JsonParser.json_reading()
         self.answer_list = []
         self.question_id = '1'
@@ -23,7 +23,7 @@ class InstructionRunner(NeonSkill):
         while int(self.question_id) != 0:
             if (len(self.answer_list) >= 3) and (self.answer_list[-3][0] == self.question_id) and (self.question_id != None):
                 print('no instructions')
-                self.speak('no instructions')
+                NeonSkill.speak('no instructions')
                 # self.Audio.no_instructions()
                 break
             else:
@@ -36,9 +36,9 @@ class InstructionRunner(NeonSkill):
                 self.answer_list.append( [self.question_id, self.words_from_prev_answer])
         else:
             print('finish')
-            self.speak('Finished')
+            NeonSkill.speak('Finished')
             #self.Audio.finish()
 
-json_path = r'/home/mariia/neon-skill-instructions/instructions/en/demo1_en.jsonl'
-runner = InstructionRunner(json_path, 'en')
-runner.execute()
+# json_path = r'/home/mariia/neon-skill-instructions/instructions/en/demo1_en.jsonl'
+# runner = InstructionRunner(json_path, 'en')
+# runner.execute()

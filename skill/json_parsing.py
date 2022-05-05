@@ -34,8 +34,8 @@ from answer_checks import Check
 from neon_utils.skills.neon_skill import NeonSkill
 
 
-class JsonParser(NeonSkill):
-    def __init__(self, json_path: str, lang: str):
+class JsonParser():
+    def __init__(self, json_path: str):
         '''
         lang: ISO 639-1
         '''
@@ -62,9 +62,10 @@ class JsonParser(NeonSkill):
                     # inserting user's previous answer into the question
                     if 'REPLACE' in result['question']:
                         text = self.Check.replace_question()
-                        answer_words = self.get_response(text)
+                        answer_words = NeonSkill.get_response(text)
                     else:
-                        answer_words = self.get_response(result['question'])
+                        print('here')
+                        answer_words = NeonSkill.get_response(result['question'])
                 
                     # checking for script in the answer variants
                     if 'answer_num_range' in result['answer'].keys():
@@ -87,16 +88,16 @@ class JsonParser(NeonSkill):
                             return str(question_id), ' '.join(answer_words)
                         # ask to repeat the question and return current question id
                         else:
-                            self.speak('Repeat, please')
+                            NeonSkill.speak('Repeat, please')
                             return str(question_id), ' '.join(answer_words)
                 else:
                     if 'REPLACE' in result['question']:
                     # inserting user's previous answer into the question
                         text = self.Check.replace_question()
-                        self.speak(text)
+                        NeonSkill.speak(text)
                         return str(question_id+1), prev_answer
                     else:
-                        self.speak(result['question'])
+                        NeonSkill.speak(result['question'])
                         return str(question_id+1), prev_answer
 
 

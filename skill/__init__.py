@@ -1,5 +1,6 @@
 from neon_utils.skills.neon_skill import NeonSkill, LOG
 from engine import InstructionRunner
+from mycroft_bus_client import Message
 import os
 
 class InstructionsSkill(NeonSkill):
@@ -15,7 +16,7 @@ class InstructionsSkill(NeonSkill):
 
     # @intent_handler(IntentBuilder("StartInstructions").require("start").require("instructions"))
 
-    def _start_instructions_prompt(self):
+    def _start_instructions_prompt(self, message):
         LOG.debug('Prompting Instructions start')
         self.make_active()
         start_instr = self.ask_yesno()
@@ -33,7 +34,7 @@ class InstructionsSkill(NeonSkill):
             elif self.server:
                 pass
             else:
-                runner = InstructionRunner(json_path, 'en')
+                runner = InstructionRunner(json_path)
                 runner.execute()
         # TODO: in JsonParsing, `get_stt` can be replaced by self.get_response() which accepts a string to speak before waiting for a user response
         #       For speech that doesn't expect a user response, `self.speak()` should be used
@@ -43,4 +44,4 @@ def create_skill():
      return InstructionsSkill()
 
 run_instructions = InstructionsSkill()
-run_instructions.handle_instructions()
+run_instructions.handle_instructions(Message("mycroft.ready"))
