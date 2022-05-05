@@ -30,7 +30,7 @@ import json
 from threading import Event
 
 # from sound import Audio
-from answer_checks import Check
+from .answer_checks import Check
 from neon_utils.skills.neon_skill import NeonSkill
 
 

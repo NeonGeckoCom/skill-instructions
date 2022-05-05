@@ -1,7 +1,7 @@
 import json
 import uuid
 
-from json_parsing import JsonParser
+from .json_parsing import JsonParser
 from neon_utils.skills.neon_skill import NeonSkill
 
 
