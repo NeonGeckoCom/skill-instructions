@@ -2,7 +2,7 @@ from neon_utils.skills.neon_skill import NeonSkill, LOG
 from mycroft_bus_client import Message
 import os
 import json
-from answer_checks import Check
+from .answer_checks import Check
 
 class InstructionsSkill(NeonSkill):
 
