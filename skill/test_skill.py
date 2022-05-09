@@ -16,6 +16,9 @@ print(dirname(dirname(__file__)))
 
 class TestSkill(unittest.TestCase):
 
+    # run_instructions = InstructionsSkill()
+    # run_instructions.handle_instructions(Message("mycroft.ready"))
+
     @classmethod
     def setUpClass(cls) -> None:
         from mycroft.skills.skill_loader import SkillLoader
@@ -28,13 +31,21 @@ class TestSkill(unittest.TestCase):
         cls.test_fs = join(dirname(__file__), "skill_fs")
         if not exists(cls.test_fs):
             mkdir(cls.test_fs)
-        cls.skill.settings_write_path = cls.test_fs
-        cls.skill.file_system.path = cls.test_fs
-        cls.skill._init_settings()
         cls.skill.initialize()
         # Override speak and speak_dialog to test passed arguments
         cls.skill.speak = Mock()
         cls.skill.speak_dialog = Mock()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        shutil.rmtree(cls.test_fs)
+
+    def test_00_skill_init(self):
+        # Test any parameters expected to be set in init or initialize methods
+        from neon_utils.skills import NeonSkill
+
+
+
 
 if __name__ == '__main__':
     pytest.main()
