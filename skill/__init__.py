@@ -19,7 +19,6 @@ class InstructionsSkill(NeonSkill):
         self.json_path = json_path
         self.answer_list = []
         self.question_id = '1'
-        # self.Audio = Audio(self.lang)
         self.words_from_prev_answer = ''
 
     def initialize(self):

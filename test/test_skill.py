@@ -37,6 +37,9 @@ from ovos_utils.messagebus import FakeBus
 from neon_utils.configuration_utils import get_neon_local_config, get_neon_user_config
 
 from mycroft.skills.skill_loader import SkillLoader
+from skill import InstructionsSkill
+from mycroft_bus_client import Message
+from neon_mana_utils import core_commands
 
 
 class TestSkill(unittest.TestCase):
@@ -78,19 +81,21 @@ class TestSkill(unittest.TestCase):
         # TODO: Put any cleanup here that runs after each test case
         pass
 
-    # @classmethod
-    # def tearDownClass(cls) -> None:
-    #     shutil.rmtree(cls.test_fs)
-    #
-    # def test_00_skill_init(self):
-    #     # Test any parameters expected to be set in init or initialize methods
-    #     from neon_utils.skills import NeonSkill
-    #
-    #     self.assertIsInstance(self.skill, NeonSkill)
-    #     # TODO: Test parameters declared in skill init/initialize here
-    #
-    # # TODO: Add tests for all intent handlers and support methods here
-    #
+    @classmethod
+    def tearDownClass(cls) -> None:
+        shutil.rmtree(cls.test_fs)
+
+    def test_00_skill_init(self):
+        # Test any parameters expected to be set in init or initialize methods
+        from neon_utils.skills import NeonSkill
+
+        self.assertIsInstance(self.skill, NeonSkill)
+        run_skill = InstructionsSkill()
+        run_skill.handle_instructions(core_commands.say_to('Start instructions'))
+        # TODO: Test parameters declared in skill init/initialize here
+
+    # TODO: Add tests for all intent handlers and support methods here
+
 
 if __name__ == '__main__':
     pytest.main()
