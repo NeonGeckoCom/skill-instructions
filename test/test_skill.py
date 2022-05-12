@@ -38,11 +38,9 @@ from neon_utils.configuration_utils import get_neon_local_config, get_neon_user_
 
 from mycroft.skills.skill_loader import SkillLoader
 from skill import InstructionsSkill
-<<<<<<< HEAD
-=======
+
 from mycroft_bus_client import Message
 from neon_mana_utils import core_commands
->>>>>>> f5693ece9085489ba72dc698d404aee732caa4b4
 
 
 class TestSkill(unittest.TestCase):
@@ -87,19 +85,7 @@ class TestSkill(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         shutil.rmtree(cls.test_fs)
-<<<<<<< HEAD
-    
-    def test_00_skill_init(self):
-        # Test any parameters expected to be set in init or initialize methods
-        from neon_utils.skills import NeonSkill
-    
-        self.assertIsInstance(self.skill, NeonSkill)
-        self.assertTrue(hasattr(self.skill.InstructionsSkill(), "pending_alerts"))
-        # TODO: Test parameters declared in skill init/initialize here
-    
-    # TODO: Add tests for all intent handlers and support methods here
-    
-=======
+
 
     def test_00_skill_init(self):
         # Test any parameters expected to be set in init or initialize methods
@@ -112,7 +98,7 @@ class TestSkill(unittest.TestCase):
 
     # TODO: Add tests for all intent handlers and support methods here
 
->>>>>>> f5693ece9085489ba72dc698d404aee732caa4b4
+
 
 if __name__ == '__main__':
     pytest.main()

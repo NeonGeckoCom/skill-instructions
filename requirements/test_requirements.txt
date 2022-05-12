@@ -1,3 +1,4 @@
 pytest
 mock
 ovos_utils
+ovos-core

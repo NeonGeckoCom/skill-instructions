@@ -1,6 +1,4 @@
 word2number
 numpy
-ovos-core
-# ovos-lingua-franca>=0.4.4a2
 wavfile
 neon_utils
