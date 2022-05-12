@@ -32,7 +32,7 @@ import re
 class Check:
     # to do: add docstrings
     def __init__(self, question_id: int, prev_answer: str, question: str, answer_list: list):
-        self.question_id = question_id
+        self.question_id = int(question_id)
         self.prev_answer = prev_answer
         self.question = question
         self.answer_list = answer_list
