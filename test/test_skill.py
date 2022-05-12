@@ -37,10 +37,9 @@ from ovos_utils.messagebus import FakeBus
 from neon_utils.configuration_utils import get_neon_local_config, get_neon_user_config
 
 from mycroft.skills.skill_loader import SkillLoader
-from skill import InstructionsSkill
+from skill.run import InstructionsSkill
 
 from mycroft_bus_client import Message
-from neon_mana_utils import core_commands
 
 
 class TestSkill(unittest.TestCase):
@@ -91,9 +90,9 @@ class TestSkill(unittest.TestCase):
         # Test any parameters expected to be set in init or initialize methods
         from neon_utils.skills import NeonSkill
 
-        self.assertIsInstance(self.skill, NeonSkill)
+        self.assertIsInstance(self.skill, InstructionsSkill)
         run_skill = InstructionsSkill()
-        run_skill.handle_instructions(core_commands.say_to('Start instructions'))
+        run_skill.handle_instructions(Message('test', {'data': 'Start instructions'}, {'context_key': 'Instructions'}))
         # TODO: Test parameters declared in skill init/initialize here
 
     # TODO: Add tests for all intent handlers and support methods here
@@ -102,6 +101,3 @@ class TestSkill(unittest.TestCase):
 
 if __name__ == '__main__':
     pytest.main()
-
-# run_instructions = InstructionsSkill()
-#         run_instructions.handle_instructions(Message("mycroft.ready"))

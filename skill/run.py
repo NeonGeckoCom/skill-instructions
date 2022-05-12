@@ -1,5 +1,4 @@
 from neon_utils.skills.neon_skill import NeonSkill, LOG
-from mycroft_bus_client import Message
 import os
 import json
 from answer_checks import Check
@@ -7,19 +6,15 @@ from answer_checks import Check
 class InstructionsSkill(NeonSkill):
 
     def __init__(self):
-        '''
-        lang: ISO 639-1
-        '''
+
         super(InstructionsSkill, self).__init__(name="InstructionsSkill")
         basepath = os.path.dirname(os.path.realpath(__file__))
         json_path = basepath+'/instructions/en/demo2_en.jsonl'
         self.json_path = json_path
         self.Check = None
-        # self.lang = 'en'
         self.json_path = json_path
         self.answer_list = []
         self.question_id = '1'
-        # self.Audio = Audio(self.lang)
         self.words_from_prev_answer = ''
 
     def initialize(self):
@@ -109,7 +104,7 @@ class InstructionsSkill(NeonSkill):
     def _start_instructions_prompt(self, message):
         LOG.debug('Prompting Instructions start')
         self.make_active()
-        start_instr = self.ask_yesno()
+        start_instr = self.ask_yesno("Would you like me to start the instructions?")
         if start_instr == 'yes':
             self.handle_instructions(message)
             return
@@ -117,15 +112,9 @@ class InstructionsSkill(NeonSkill):
     def handle_instructions(self, message):
         # TODO: Get instructions by name from message
         if self.neon_in_request(message):
-            if self.request_from_mobile(message):
-                pass
-            elif self.server:
-                pass
-            else:
-                self.json_list = self.json_reading()
-                self.execute()
-        # TODO: in JsonParsing, `get_stt` can be replaced by self.get_response() which accepts a string to speak before waiting for a user response
-        #       For speech that doesn't expect a user response, `self.speak()` should be used
+            self.json_list = self.json_reading()
+            self.execute()
+                
 
 def create_skill():
      return InstructionsSkill()
