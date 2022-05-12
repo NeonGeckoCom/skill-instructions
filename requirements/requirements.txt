@@ -1,4 +1,3 @@
-word2number
 numpy
 wavfile
 neon_utils

@@ -1,0 +1,43 @@
+{
+    "title": "Instructions",
+    "url": "https://github.com/NeonGeckoCom/neon-skill-instructions",
+    "summary": "Skill to handle various instructions scripts",
+    "short_description": "Skill to demo Neon capabilities",
+    "description": "The instructions skill parses the script with instructions, asks user a question, waits for an answer, checks user's answer and goes to next question.",
+    "examples": [
+        "start instructions"
+    ],
+    "desktopFile": false,
+    "warning": "",
+    "systemDeps": false,
+    "requirements": {
+        "python": [
+            "neon-utils>=0.5.7"
+        ],
+        "system": {},
+        "skill": []
+    },
+    "incompatible_skills": [],
+    "platforms": [
+        "i386",
+        "x86_64",
+        "ia64",
+        "arm64",
+        "arm"
+    ],
+    "branch": "master",
+    "license": "NeonAI License v1.0",
+    "icon": "https://0000.us/klatchat/app/files/neon_images/icons/neon_skill.png",
+    "category": "Information",
+    "categories": [
+        "Information"
+    ],
+    "tags": [
+        "NeonGecko",
+        "NeonAI",
+        "Instructions"
+    ],
+    "skillname": "Instructions",
+    "authorname": "NeonGeckoCom",
+    "foldername": null
+}

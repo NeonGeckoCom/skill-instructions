@@ -1,7 +1,6 @@
 from neon_utils.skills.neon_skill import NeonSkill, LOG
 import os
 import json
-from answer_checks import Check
 
 class InstructionsSkill(NeonSkill):
 
@@ -9,7 +8,7 @@ class InstructionsSkill(NeonSkill):
 
         super(InstructionsSkill, self).__init__(name="InstructionsSkill")
         basepath = os.path.dirname(os.path.realpath(__file__))
-        json_path = basepath+'/instructions/en/demo2_en.jsonl'
+        json_path = basepath+'/scripts/en/demo2_en.jsonl'
         self.json_path = json_path
         self.Check = None
         self.json_path = json_path
@@ -114,7 +113,6 @@ class InstructionsSkill(NeonSkill):
         if self.neon_in_request(message):
             self.json_list = self.json_reading()
             self.execute()
-                
 
 def create_skill():
      return InstructionsSkill()
