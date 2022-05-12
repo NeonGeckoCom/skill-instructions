@@ -20,10 +20,16 @@ class InstructionsSkill(NeonSkill):
 
     #alternative intent parsing 
     
-    def initialize(self):
-        start_instructions_intent = IntentBuilder('run_instructions.intent').require("instructions_keyword").optionally('neon').build()
-        self.register_intent_file(start_instructions_intent, self.start_instructions_intent)
+    # def initialize(self):
+    #     start_instructions_intent = IntentBuilder('run_instructions.intent').require("instructions_keyword").optionally('neon').build()
+    #     # self.register_intent_file(start_instructions_intent, self.start_instructions_intent)
 
+    def initialize(self):
+        self.register_intent_file("run_instructions.intent", self.handle_instructions)
+
+        # When first run or demo prompt not dismissed, wait for load and prompt user
+        if self.settings['prompt_on_start'] and not self.server:
+            self.bus.once('mycroft.ready', self._start_instructions_prompt)
 
     def start_instructions_intent(self, message):
         LOG.debug(message.data)
