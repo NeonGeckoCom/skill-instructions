@@ -1,7 +1,6 @@
 from neon_utils.skills.neon_skill import NeonSkill, LOG
 import os
 import json
-from mycroft import intent_handler
 from adapt.intent import IntentBuilder
 # from neon_utils.instruction_check import Check
 
@@ -19,20 +18,20 @@ class InstructionsSkill(NeonSkill):
         self.question_id = '1'
         self.words_from_prev_answer = ''
 
-    # alternative intent parsing 
+    #alternative intent parsing 
     
-    # intent_for_adapt = IntentBuilder('run_instructions.intent').require("Instructions").optionally('Neon')
-    # @intent_handler(intent_for_adapt)
-    # def handle_intent(self, message):
-    #     self._start_instructions_prompt
-    #     return
-
     def initialize(self):
-        self.register_intent_file("run_instructions.intent", self.handle_instructions)
+        start_instructions_intent = IntentBuilder('run_instructions.intent').require("instructions_keyword").optionally('neon').build()
+        self.register_intent_file(start_instructions_intent, self.start_instructions_intent)
 
-        # When first run or demo prompt not dismissed, wait for load and prompt user
+
+    def start_instructions_intent(self, message):
+        LOG.debug(message.data)
+        #When first run or prompt not dismissed, wait for load and prompt user
         if self.settings['prompt_on_start'] and not self.server:
             self.bus.once('mycroft.ready', self._start_instructions_prompt)
+        self._start_instructions_prompt
+        return
 
 
     def json_reading(self):
