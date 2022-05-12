@@ -37,6 +37,7 @@ from ovos_utils.messagebus import FakeBus
 from neon_utils.configuration_utils import get_neon_local_config, get_neon_user_config
 
 from mycroft.skills.skill_loader import SkillLoader
+from skill import InstructionsSkill
 
 
 class TestSkill(unittest.TestCase):
@@ -50,7 +51,7 @@ class TestSkill(unittest.TestCase):
         cls.skill = skill_loader.instance
 
         # Define a directory to use for testing
-        cls.test_fs = join(dirname(__file__), "skill_fs")
+        cls.test_fs = join(dirname(__file__), "skill")
         if not exists(cls.test_fs):
             mkdir(cls.test_fs)
 
@@ -78,19 +79,23 @@ class TestSkill(unittest.TestCase):
         # TODO: Put any cleanup here that runs after each test case
         pass
 
-    # @classmethod
-    # def tearDownClass(cls) -> None:
-    #     shutil.rmtree(cls.test_fs)
-    #
-    # def test_00_skill_init(self):
-    #     # Test any parameters expected to be set in init or initialize methods
-    #     from neon_utils.skills import NeonSkill
-    #
-    #     self.assertIsInstance(self.skill, NeonSkill)
-    #     # TODO: Test parameters declared in skill init/initialize here
-    #
-    # # TODO: Add tests for all intent handlers and support methods here
-    #
+    @classmethod
+    def tearDownClass(cls) -> None:
+        shutil.rmtree(cls.test_fs)
+    
+    def test_00_skill_init(self):
+        # Test any parameters expected to be set in init or initialize methods
+        from neon_utils.skills import NeonSkill
+    
+        self.assertIsInstance(self.skill, NeonSkill)
+        self.assertTrue(hasattr(self.skill.InstructionsSkill(), "pending_alerts"))
+        # TODO: Test parameters declared in skill init/initialize here
+    
+    # TODO: Add tests for all intent handlers and support methods here
+    
 
 if __name__ == '__main__':
     pytest.main()
+
+# run_instructions = InstructionsSkill()
+#         run_instructions.handle_instructions(Message("mycroft.ready"))
