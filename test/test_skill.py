@@ -89,7 +89,7 @@ class TestSkill(unittest.TestCase):
 
         self.assertIsInstance(self.skill, InstructionsSkill)
         # run_skill = InstructionsSkill()
-        # run_skill.handle_instructions(Message('test', {'data': 'Start instructions'}, {'context_key': 'Instructions'}))
+        # run_skill.handle_instructions(Message('test', {'data': {'utterance': 'Start instructions'}, {'context_key': 'Instructions'}))
 
         # TODO: Test parameters declared in skill init/initialize here
 
