@@ -91,6 +91,8 @@ class TestSkill(unittest.TestCase):
         # run_skill = InstructionsSkill()
         self.skill.handle_instructions(Message('test', {'utterance': 'start instructions'}, {'context_key': 'Instructions'}))
 
+        self.skill._start_instructions_prompt(Message('test', {'utterance': 'start instructions'}, {'context_key': 'Instructions'}))
+
         # TODO: Test parameters declared in skill init/initialize here
 
     # # TODO: Add tests for all intent handlers and support methods here
