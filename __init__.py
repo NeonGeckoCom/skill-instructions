@@ -2,7 +2,8 @@ from neon_utils.skills.neon_skill import NeonSkill, LOG
 import os
 import json
 from adapt.intent import IntentBuilder
-# from neon_utils.instruction_check import Check
+from mycroft.skills.core import intent_file_handler
+import neon_utils.instruction_checks
 
 class InstructionsSkill(NeonSkill):
 
@@ -31,6 +32,7 @@ class InstructionsSkill(NeonSkill):
         if self.settings['prompt_on_start'] and not self.server:
             self.bus.once('mycroft.ready', self._start_instructions_prompt)
 
+    @intent_file_handler("run_instructions.intent")
     def start_instructions_intent(self, message):
         LOG.debug(message.data)
         #When first run or prompt not dismissed, wait for load and prompt user
