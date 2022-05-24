@@ -1,3 +1,4 @@
 numpy
 wavfile
 neon_utils>=0.16.1a6
+word2number
