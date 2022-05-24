@@ -1,9 +1,8 @@
 from neon_utils.skills.neon_skill import NeonSkill, LOG
 import os
 import json
-from adapt.intent import IntentBuilder
 from mycroft.skills.core import intent_file_handler
-import neon_utils.instruction_checks
+from neon_utils.instruction_checks import Check
 
 class InstructionsSkill(NeonSkill):
 
