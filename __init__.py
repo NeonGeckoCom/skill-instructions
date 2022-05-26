@@ -11,6 +11,7 @@ class InstructionsSkill(NeonSkill):
         super(InstructionsSkill, self).__init__(name="InstructionsSkill")
         basepath = os.path.dirname(os.path.realpath(__file__))
         json_path = basepath+'/scripts/en/demo2_en.jsonl'
+        self.script_path = basepath+'/scripts'
         self.json_path = json_path
         self.Check = None
         self.json_path = json_path
@@ -40,6 +41,7 @@ class InstructionsSkill(NeonSkill):
     def json_reading(self):
       with open(self.json_path, 'r') as json_file:
           json_list = list(json_file)
+          print(json_list)
           return json_list
 
 
@@ -94,7 +96,6 @@ class InstructionsSkill(NeonSkill):
     #                     return str(question_id+1), prev_answer
     
     # def execute(self):
-
     #     while int(self.question_id) != 0:
     #         if (len(self.answer_list) >= 3) and (self.answer_list[-3][0] == self.question_id) and (self.question_id != None):
     #             print('no instructions')
@@ -114,13 +115,18 @@ class InstructionsSkill(NeonSkill):
     #         self.speak('Finished')
 
     def execute(self):
-        print('Loaded')
-    
+        print('downloaded')
+
     def _start_instructions_prompt(self, message):
         LOG.debug('Prompting Instructions start')
         self.make_active()
         start_instr = self.ask_yesno("Would you like me to start the instructions?")
         if start_instr == 'yes':
+            instruction_name = self.get_response('What instruction do you want to handle?')
+            for folder in os.walk(self.script_path):
+                for script in folder[2]:
+                    if instruction_name in script:
+                        self.json_path = script
             self.handle_instructions(message)
             return
     
@@ -129,6 +135,7 @@ class InstructionsSkill(NeonSkill):
         # TODO: Get instructions by name from message
         if self.neon_in_request(message):
             self.json_list = self.json_reading()
+            print(self.json_list)
             self.execute()
                 
 
