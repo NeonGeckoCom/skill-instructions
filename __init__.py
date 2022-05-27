@@ -19,7 +19,6 @@ class InstructionsSkill(NeonSkill):
         self.question_id = '1'
         self.words_from_prev_answer = ''
 
-    #alternative intent parsing 
 
     def initialize(self):
         # self.register_intent_file("run_instructions.intent", self.handle_instructions)
@@ -100,7 +99,7 @@ class InstructionsSkill(NeonSkill):
     #         if (len(self.answer_list) >= 3) and (self.answer_list[-3][0] == self.question_id) and (self.question_id != None):
     #             print('no instructions')
     #             self.speak('no instructions')
-    #             # self.Audio.no_instructions()
+    #             # self.no_instructions()
     #             break
     #         else:
     #             print(self.question_id)
@@ -114,6 +113,23 @@ class InstructionsSkill(NeonSkill):
     #         print('finish')
     #         self.speak('Finished')
 
+    def no_instructions(self):
+        if self.lang == 'uk':
+            self.speak('Закінчили.')
+        elif self.lang == 'pl':
+            self.speak('Skończone.')
+        else:
+            self.speak('Finished.')
+
+    def repeat(self):
+        if self.lang == 'uk':
+            self.speak('Повторіть, будь-ласка.')
+        elif self.lang == 'pl':
+            self.speak('Powtórz proszę.')
+        else:
+            self.speak('Repeat, please.')
+
+
     def execute(self):
         print('downloaded')
 
@@ -122,6 +138,7 @@ class InstructionsSkill(NeonSkill):
         self.make_active()
         start_instr = self.ask_yesno("Would you like me to start the instructions?")
         if start_instr == 'yes':
+            # selection of ithe nstruction according to user's answer
             instruction_name = self.get_response('What instruction do you want to handle?')
             for folder in os.walk(self.script_path):
                 for script in folder[2]:
@@ -138,7 +155,6 @@ class InstructionsSkill(NeonSkill):
             print(self.json_list)
             self.execute()
                 
-
 
 def create_skill():
      return InstructionsSkill()
