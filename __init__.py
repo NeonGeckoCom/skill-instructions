@@ -113,13 +113,21 @@ class InstructionsSkill(NeonSkill):
     #         print('finish')
     #         self.speak('Finished')
 
-    def no_instructions(self):
+    def finish(self):
         if self.lang == 'uk':
             self.speak('Закінчили.')
         elif self.lang == 'pl':
             self.speak('Skończone.')
         else:
             self.speak('Finished.')
+
+    def no_instruction(self):
+        if self.lang == 'uk':
+            self.speak('Немає інструкцій для цього випадку.')
+        elif self.lang == 'pl':
+            self.speak('Brak struktury dla tej sprawy.')
+        else:
+            self.speak('No instructions for this case.')
 
     def repeat(self):
         if self.lang == 'uk':
