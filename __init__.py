@@ -99,16 +99,19 @@ class InstructionsSkill(NeonSkill):
 
                     # checking for existence of words in user's answer in correct answer
                     else:
-                        answer_words = answer_words.split(' ')
-                        exist = [word for word in answer_words if word in result['answer'].keys()]
-                        # return question id from json file
-                        if len(exist) != 0:
-                            question_id = result['answer'][exist[0]]
-                            return str(question_id), ' '.join(answer_words)
-                        # ask to repeat the question and return current question id
+                        if answer_words != None:
+                            answer_words = answer_words.split(' ')
+                            exist = [word for word in answer_words if word in result['answer'].keys()]
+                            # return question id from json file
+                            if len(exist) != 0:
+                                question_id = result['answer'][exist[0]]
+                                return str(question_id), ' '.join(answer_words)
+                            # ask to repeat the question and return current question id
+                            else:
+                                self.repeat()
+                                return str(question_id), ' '.join(answer_words)
                         else:
-                            self.repeat()
-                            return str(question_id), ' '.join(answer_words)
+                            return str(0), self.repeat()
                 else:
                     if 'REPLACE' in result['question']:
                     # inserting user's previous answer into the question
