@@ -10,7 +10,7 @@ class InstructionsSkill(NeonSkill):
 
         super(InstructionsSkill, self).__init__(name="InstructionsSkill")
         basepath = os.path.dirname(os.path.realpath(__file__))
-        json_path = basepath+'/scripts/en/demo2_en.jsonl'
+        json_path = basepath+'/scripts/en-us/demo2_en.jsonl'
         self.script_path = basepath+'/scripts'
         self.json_path = json_path
         self.Check = None
@@ -20,27 +20,19 @@ class InstructionsSkill(NeonSkill):
         self.words_from_prev_answer = ''
 
 
-    def initialize(self):
-        # self.register_intent_file("run_instructions.intent", self.handle_instructions)
-
-        # When first run or demo prompt not dismissed, wait for load and prompt user
-        if self.settings['prompt_on_start'] and not self.server:
-            self.bus.once('mycroft.ready', self._start_instructions_prompt)
-
     @intent_file_handler("run_instructions.intent")
     def start_instructions_intent(self, message):
-        LOG.debug(message.data)
+        LOG.info(message.data)
         #When first run or prompt not dismissed, wait for load and prompt user
         if self.settings['prompt_on_start'] and not self.server:
-            self.bus.once('mycroft.ready', self._start_instructions_prompt)
-        self._start_instructions_prompt
+            self.bus.once('mycroft.ready', self._start_instructions_prompt(message))
+        self._start_instructions_prompt(message)
         return
 
 
     def json_reading(self):
       with open(self.json_path, 'r') as json_file:
           json_list = list(json_file)
-          LOG.info(json_list)
           return json_list
 
     def finish(self):
@@ -50,6 +42,7 @@ class InstructionsSkill(NeonSkill):
             self.speak('Skończone.')
         else:
             self.speak('Finished.')
+        self.question_id = '1'
 
     def no_instruction(self):
         if self.lang == 'uk':
@@ -58,6 +51,7 @@ class InstructionsSkill(NeonSkill):
             self.speak('Brak struktury dla tej sprawy.')
         else:
             self.speak('No instructions for this case.')
+        self.question_id = '1'
 
     def repeat(self):
         if self.lang == 'uk':
@@ -66,6 +60,32 @@ class InstructionsSkill(NeonSkill):
             self.speak('Powtórz proszę.')
         else:
             self.speak('Repeat, please.')
+    
+    def instruction_selection(self, message):
+        selected_instruction = ''
+        for folder in os.walk(self.script_path):
+            if message.data['lang'] in folder[1]:
+                folder_name = folder[0]+'/'+message.data['lang']+'/'
+                for script in os.walk(folder_name):
+                    if message.data['lang'] == 'uk':
+                        instruction_name = self.get_response('Виберіть із наявних інструкцій: '+" ".join(script[2]))
+                    elif message.data['lang'] == 'pl':
+                        instruction_name = self.get_response('Wybierz z istniejących instrukcji: '+" ".join(script[2]))
+                    else:
+                        instruction_name = self.get_response('Select from existing instructions: '+" ".join(script[2]))
+                    selected_instruction = [name for name in script[2] if instruction_name in name]
+                    try:
+                        self.json_path = folder_name+selected_instruction[0]
+                        self.speak('Your path: ' + self.json_path)
+                        self.handle_instructions(message)
+                    except OSError as e:
+                        self.speak('No such file: '+ str(e))
+                        self.json_path = folder_name+''
+                        self.speak('starting: '+self.json_path)
+                        self.handle_instructions(message)
+            else:
+                LOG.info('This lang is not supported yet.')
+                self.speak('This lang is not supported yet.')
 
 
     def conversation(self, json_list, question_id, prev_answer, answer_list):
@@ -84,7 +104,6 @@ class InstructionsSkill(NeonSkill):
                         answer_words = self.get_response(text)
                     else:
                         answer_words = self.get_response(result['question'])
-                
                     # checking for script in the answer variants
                     if 'answer_num_range' in result['answer'].keys():
                         return self.Check.answer_num_range(answer_words)
@@ -131,7 +150,7 @@ class InstructionsSkill(NeonSkill):
                 result = self.conversation(self.json_list, self.question_id, self.words_from_prev_answer, self.answer_list)
                 self.question_id = result[0]
                 self.words_from_prev_answer = result[1]
-                self.answer_list.append( [self.question_id, self.words_from_prev_answer])
+                self.answer_list.append([self.question_id, self.words_from_prev_answer])
         else:
             self.finish()
 
@@ -142,12 +161,7 @@ class InstructionsSkill(NeonSkill):
         start_instr = self.ask_yesno("Would you like me to start the instructions?")
         if start_instr == 'yes':
             # selection of ithe nstruction according to user's answer
-            instruction_name = self.get_response('What instruction do you want to handle?')
-            for folder in os.walk(self.script_path):
-                for script in folder[2]:
-                    if instruction_name in script:
-                        self.json_path = script
-            self.handle_instructions(message)
+            self.instruction_selection(message)
             return
     
 
@@ -155,7 +169,6 @@ class InstructionsSkill(NeonSkill):
         # TODO: Get instructions by name from message
         if self.neon_in_request(message):
             self.json_list = self.json_reading()
-            print(self.json_list)
             self.execute()
                 
 
