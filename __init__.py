@@ -36,30 +36,15 @@ class InstructionsSkill(NeonSkill):
           return json_list
 
     def finish(self):
-        if self.lang == 'uk':
-            self.speak('Закінчили.')
-        elif self.lang == 'pl':
-            self.speak('Skończone.')
-        else:
-            self.speak('Finished.')
+        self.speak_dialog("finished")
         self.question_id = '1'
 
     def no_instruction(self):
-        if self.lang == 'uk':
-            self.speak('Немає інструкцій для цього випадку.')
-        elif self.lang == 'pl':
-            self.speak('Brak struktury dla tej sprawy.')
-        else:
-            self.speak('No instructions for this case.')
+        self.speak_dialog("no_instruction")
         self.question_id = '1'
 
     def repeat(self):
-        if self.lang == 'uk':
-            self.speak('Повторіть, будь-ласка.')
-        elif self.lang == 'pl':
-            self.speak('Powtórz proszę.')
-        else:
-            self.speak('Repeat, please.')
+        self.speak_dialog("repeat")
     
     def instruction_selection(self, message):
         selected_instruction = ''
