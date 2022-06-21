@@ -4,34 +4,34 @@ import json
 from mycroft.skills.core import intent_file_handler
 from neon_utils.instruction_checks import Check
 
+
 class InstructionsSkill(NeonSkill):
 
     def __init__(self):
 
         super(InstructionsSkill, self).__init__(name="InstructionsSkill")
-        basepath = os.path.dirname(os.path.realpath(__file__))
-        json_path = basepath+'/scripts/en-us/demo2_en.jsonl'
-        self.script_path = basepath+'/scripts'
-        self.json_path = json_path
+        # json_path = basepath+'/scripts/en-us/demo2_en.jsonl'
+        self.script_path = os.path.join(os.path.dirname(__file__), 'scripts')
         self.Check = None
-        self.json_path = json_path
+        # self.json_path = None
         self.answer_list = []
         self.question_id = '1'
         self.words_from_prev_answer = ''
 
+    def initialize(self):
+        # When first run or prompt not dismissed, wait for load and prompt user
+        if self.settings['prompt_on_start'] and not self.server:
+            self.bus.once('mycroft.ready', self._start_instructions_prompt)
 
     @intent_file_handler("run_instructions.intent")
     def start_instructions_intent(self, message):
         LOG.info(message.data)
-        #When first run or prompt not dismissed, wait for load and prompt user
-        if self.settings['prompt_on_start'] and not self.server:
-            self.bus.once('mycroft.ready', self._start_instructions_prompt(message))
+
         self._start_instructions_prompt(message)
         return
 
-
-    def json_reading(self):
-      with open(self.json_path, 'r') as json_file:
+    def json_reading(self, json_path):
+      with open(json_path, 'r') as json_file:
           json_list = list(json_file)
           return json_list
 
@@ -49,8 +49,10 @@ class InstructionsSkill(NeonSkill):
     def instruction_selection(self, message):
         selected_instruction = ''
         for folder in os.walk(self.script_path):
-            if message.data['lang'] in folder[1]:
-                folder_name = folder[0]+'/'+message.data['lang']+'/'
+            request_lang = message.data['lang'].split('-')[0]
+            LOG.info(f"Checking lang: {folder[1]}")
+            if request_lang in folder[1]:
+                folder_name = os.path.join(folder[0], request_lang)
                 for script in os.walk(folder_name):
                     if message.data['lang'] == 'uk':
                         instruction_name = self.get_response('Виберіть із наявних інструкцій: '+" ".join(script[2]))
@@ -60,18 +62,20 @@ class InstructionsSkill(NeonSkill):
                         instruction_name = self.get_response('Select from existing instructions: '+" ".join(script[2]))
                     selected_instruction = [name for name in script[2] if instruction_name in name]
                     try:
-                        self.json_path = folder_name+selected_instruction[0]
-                        self.speak('Your path: ' + self.json_path)
-                        self.handle_instructions(message)
+                        json_path = os.path.join(folder_name,
+                                                 selected_instruction[0])
+                        LOG.info('Your path: ' + json_path)
+                        self.handle_instructions(message, json_path)
+                        return
                     except OSError as e:
-                        self.speak('No such file: '+ str(e))
-                        self.json_path = folder_name+''
-                        self.speak('starting: '+self.json_path)
-                        self.handle_instructions(message)
+                        self.speak('No such file: ' + str(e))
+                        # self.json_path = folder_name+''
+                        # self.speak('starting: '+self.json_path)
+                        # self.handle_instructions(message)
             else:
-                LOG.info('This lang is not supported yet.')
+                LOG.info(f'{message.data["lang"]} is not supported yet.')
                 self.speak('This lang is not supported yet.')
-
+                return
 
     def conversation(self, json_list, question_id, prev_answer, answer_list):
         for json_str in json_list:
@@ -126,19 +130,21 @@ class InstructionsSkill(NeonSkill):
                         self.speak(result['question'])
                         return str(question_id+1), prev_answer
     
-    def execute(self):
+    def execute(self, json_list):
         while int(self.question_id) != 0:
             if (len(self.answer_list) >= 3) and (self.answer_list[-3][0] == self.question_id) and (self.question_id != None):
                 self.no_instruction()
                 break
             else:
-                result = self.conversation(self.json_list, self.question_id, self.words_from_prev_answer, self.answer_list)
+                result = self.conversation(json_list, self.question_id,
+                                           self.words_from_prev_answer,
+                                           self.answer_list)
+                LOG.info(result)
                 self.question_id = result[0]
                 self.words_from_prev_answer = result[1]
                 self.answer_list.append([self.question_id, self.words_from_prev_answer])
         else:
             self.finish()
-
 
     def _start_instructions_prompt(self, message):
         LOG.info('Prompting Instructions start')
@@ -148,14 +154,15 @@ class InstructionsSkill(NeonSkill):
             # selection of ithe nstruction according to user's answer
             self.instruction_selection(message)
             return
-    
+        else:
+            self.speak("okay.")  # TODO: Better dialog
 
-    def handle_instructions(self, message):
+    def handle_instructions(self, message, json_path):
         # TODO: Get instructions by name from message
         if self.neon_in_request(message):
-            self.json_list = self.json_reading()
-            self.execute()
+            json_list = self.json_reading(json_path)
+            self.execute(json_list)
                 
 
 def create_skill():
-     return InstructionsSkill()
+    return InstructionsSkill()
