@@ -58,8 +58,6 @@ class TestSkill(unittest.TestCase):
             mkdir(cls.test_fs)
 
         # Override the configuration and fs paths to use the test directory
-        cls.skill._local_config = get_neon_local_config(cls.test_fs)
-        cls.skill._user_config = get_neon_user_config(cls.test_fs)
         cls.skill.settings_write_path = cls.test_fs
         cls.skill.file_system.path = cls.test_fs
         cls.skill._init_settings()
@@ -81,12 +79,15 @@ class TestSkill(unittest.TestCase):
     def tearDownClass(cls) -> None:
         shutil.rmtree(cls.test_fs)
 
-
     def test_00_skill_init(self):
-
-        self.skill.handle_instructions(Message('test', {'utterance': 'start instructions'}, {'context_key': 'Instructions'}))
-        self.skill._start_instructions_prompt(Message('test', {'utterance': 'start instructions'}, {'context_key': 'Instructions'}))
-
+        test_file_path = join(dirname(dirname(__file__)), "scripts", "en",
+                              "demo1_en-us.jsonl")
+        self.skill.handle_instructions(
+            Message('test', {'utterance': 'start instructions'},
+                    {'context_key': 'Instructions'}), None)
+        self.skill._start_instructions_prompt(
+            Message('test', {'utterance': 'start instructions'},
+                    {'context_key': 'Instructions'}))
 
 
 if __name__ == '__main__':
