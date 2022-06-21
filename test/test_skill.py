@@ -84,7 +84,7 @@ class TestSkill(unittest.TestCase):
                               "demo1_en-us.jsonl")
         self.skill.handle_instructions(
             Message('test', {'utterance': 'start instructions'},
-                    {'context_key': 'Instructions'}), None)
+                    {'context_key': 'Instructions'}), test_file_path)
         self.skill._start_instructions_prompt(
             Message('test', {'utterance': 'start instructions'},
                     {'context_key': 'Instructions'}))
