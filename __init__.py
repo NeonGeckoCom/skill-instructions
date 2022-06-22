@@ -48,34 +48,28 @@ class InstructionsSkill(NeonSkill):
     
     def instruction_selection(self, message):
         selected_instruction = ''
-        for folder in os.walk(self.script_path):
-            request_lang = message.data['lang'].split('-')[0]
-            LOG.info(f"Checking lang: {folder[1]}")
-            if request_lang in folder[1]:
-                folder_name = os.path.join(folder[0], request_lang)
-                for script in os.walk(folder_name):
-                    if message.data['lang'] == 'uk':
-                        instruction_name = self.get_response('Виберіть із наявних інструкцій: '+" ".join(script[2]))
-                    elif message.data['lang'] == 'pl':
-                        instruction_name = self.get_response('Wybierz z istniejących instrukcji: '+" ".join(script[2]))
-                    else:
-                        instruction_name = self.get_response('Select from existing instructions: '+" ".join(script[2]))
-                    selected_instruction = [name for name in script[2] if instruction_name in name]
-                    try:
-                        json_path = os.path.join(folder_name,
-                                                 selected_instruction[0])
-                        LOG.info('Your path: ' + json_path)
-                        self.handle_instructions(message, json_path)
-                        return
-                    except OSError as e:
-                        self.speak('No such file: ' + str(e))
-                        # self.json_path = folder_name+''
-                        # self.speak('starting: '+self.json_path)
-                        # self.handle_instructions(message)
-            else:
-                LOG.info(f'{message.data["lang"]} is not supported yet.')
-                self.speak('This lang is not supported yet.')
+        request_lang = message.data['lang'].split('-')[0]
+        LOG.info(f"Checking lang... {os.listdir(self.script_path)}")
+        if request_lang in os.listdir(self.script_path):
+            folder_name = os.path.join(self.script_path, request_lang)
+            self.speak_dialog("choose")
+            instruction_name = self.get_response(" ".join(os.listdir(folder_name)))
+            selected_instruction = [name for name in os.listdir(folder_name) if instruction_name in name]
+            try:
+                json_path = os.path.join(folder_name,
+                                            selected_instruction[0])
+                LOG.info('Your path: ' + json_path)
+                self.handle_instructions(message, json_path)
                 return
+            except OSError as e:
+                    self.speak('No such file: ' + str(e))
+                    # self.json_path = folder_name+''
+                    # self.speak('starting: '+self.json_path)
+                    # self.handle_instructions(message)
+        else:
+            LOG.info(f'{message.data["lang"]} is not supported yet.')
+            self.speak('This lang is not supported yet.')
+            return 
 
     def conversation(self, json_list, question_id, prev_answer, answer_list):
         for json_str in json_list:
@@ -149,9 +143,9 @@ class InstructionsSkill(NeonSkill):
     def _start_instructions_prompt(self, message):
         LOG.info('Prompting Instructions start')
         self.make_active()
-        start_instr = self.ask_yesno("Would you like me to start the instructions?")
+        start_instr = self.ask_yesno("start")
         if start_instr == 'yes':
-            # selection of ithe nstruction according to user's answer
+            # selection of the nstruction according to user's answer
             self.instruction_selection(message)
             return
         else:
