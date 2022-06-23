@@ -47,14 +47,29 @@ class InstructionsSkill(NeonSkill):
         self.speak_dialog("repeat")
     
     def instruction_selection(self, message):
-        selected_instruction = ''
+        selected_instruction = []
+        check = 1
+        self.Check = Check(0, '', '', '')
         request_lang = message.data['lang'].split('-')[0]
         LOG.info(f"Checking lang... {os.listdir(self.script_path)}")
         if request_lang in os.listdir(self.script_path):
             folder_name = os.path.join(self.script_path, request_lang)
-            self.speak_dialog("choose")
-            instruction_name = self.get_response(" ".join(os.listdir(folder_name)))
-            selected_instruction = [name for name in os.listdir(folder_name) if instruction_name in name]
+            while check != 0:
+                self.speak_dialog("choose")
+                instruction_name = self.get_response("instruction_names")
+                numbers = [word for word in instruction_name if word.isdigit()]
+                numbers = ''.join(numbers)
+                if len(numbers)==0:
+                    numbers = self.Check.is_number(str(instruction_name))
+                    numbers = numbers[1]
+                LOG.info(f"Instructions number ... {numbers}")
+                selected_instruction = [name for name in os.listdir(folder_name) if str(numbers) in name]
+                LOG.info(f"Selected path ... {str(selected_instruction)}")
+                if len(selected_instruction) != 0:
+                    self.speak_dialog("file_exists")
+                    check = 0
+                else:
+                    self.speak_dialog("no_file")
             try:
                 json_path = os.path.join(folder_name,
                                             selected_instruction[0])
@@ -63,9 +78,6 @@ class InstructionsSkill(NeonSkill):
                 return
             except OSError as e:
                     self.speak('No such file: ' + str(e))
-                    # self.json_path = folder_name+''
-                    # self.speak('starting: '+self.json_path)
-                    # self.handle_instructions(message)
         else:
             LOG.info(f'{message.data["lang"]} is not supported yet.')
             self.speak('This lang is not supported yet.')
@@ -116,7 +128,7 @@ class InstructionsSkill(NeonSkill):
                             return str(0), self.repeat()
                 else:
                     if 'REPLACE' in result['question']:
-                    # inserting user's previous answer into the question
+                        # inserting user's previous answer into the question
                         text = self.Check.replace_question()
                         self.speak(text)
                         return str(question_id+1), prev_answer
