@@ -47,7 +47,7 @@ class InstructionsSkill(NeonSkill):
         self.speak_dialog("repeat")
 
     def lang_check(self, message):
-        LOG.info(f"Message is {message}")
+        LOG.info(f"Message is {message.data}")
         request_lang = message.data['lang'].split('-')[0]
         LOG.info(f"Checking lang... {os.listdir(self.script_path)}")
         if request_lang in os.listdir(self.script_path):

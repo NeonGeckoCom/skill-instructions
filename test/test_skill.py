@@ -83,10 +83,10 @@ class TestSkill(unittest.TestCase):
         test_file_path = join(dirname(dirname(__file__)), "scripts", "en",
                               "demo1_en-us.jsonl")
         self.skill.handle_instructions(
-            Message('test', {'utterance': 'start instructions'},
+            Message('test', {'utterance': 'start instructions', 'lang': 'en-us'},
                     {'context_key': 'Instructions'}), test_file_path)
         self.skill._start_instructions_prompt(
-            Message('test', {'utterance': 'start instructions'},
+            Message('test', {'utterance': 'start instructions', 'lang': 'en-us'},
                     {'context_key': 'Instructions'}))
 
 
