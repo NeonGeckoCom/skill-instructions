@@ -156,12 +156,17 @@ class InstructionsSkill(NeonSkill):
         LOG.info('Prompting Instructions start')
         self.make_active()
         start_instr = self.ask_yesno("start")
-        if start_instr == 'yes':
-            # selection of the nstruction according to user's answer
+        if start_instr == "yes":
+            # selection of the istruction according to user's answer
             self.instruction_selection(message)
             return
         else:
-            self.speak("okay.")  # TODO: Better dialog
+            repeat_instr = self.ask_yesno("Do you want to stop instructions?")
+            if repeat_instr == 'yes':
+                self.speak('Okey, goodbye!')
+            else:
+                self.instruction_selection(message)
+                return
 
     def handle_instructions(self, message, json_path):
         # TODO: Get instructions by name from message
