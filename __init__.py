@@ -81,22 +81,26 @@ class InstructionsSkill(NeonSkill):
                     LOG.info(f"Check is ... {check}")
                     self.speak_dialog("choose")
                     instruction_name = self.get_response("instruction_names")
-                    LOG.info('No voc is matched: ' + str(self.voc_match(instruction_name, "no")))
-                    numbers = [word for word in instruction_name if word.isdigit()]
-                    numbers = ''.join(numbers)
-                    if len(numbers)==0:
-                        numbers = self.Check.is_number(str(instruction_name))
-                        numbers = numbers[1]
-                    LOG.info(f"Instructions number ... {numbers}")
-                    selected_instruction = [name for name in os.listdir(folder_name) if str(numbers) in name]
-                    LOG.info(f"Selected path ... {str(selected_instruction)}")
-                    if len(selected_instruction) != 0:
-                        self.speak_dialog("file_exists")
-                        check = 0
-                        self.open_instructions_file(folder_name, selected_instruction[0], message)
+                    if instruction_name != None:
+                        LOG.info('No voc is matched: ' + str(self.voc_match(instruction_name, "no")))
+                        numbers = [word for word in instruction_name if word.isdigit()]
+                        numbers = ''.join(numbers)
+                        if len(numbers)==0:
+                            numbers = self.Check.is_number(str(instruction_name))
+                            numbers = numbers[1]
+                        LOG.info(f"Instructions number ... {numbers}")
+                        selected_instruction = [name for name in os.listdir(folder_name) if str(numbers) in name]
+                        LOG.info(f"Selected path ... {str(selected_instruction)}")
+                        if len(selected_instruction) != 0:
+                            self.speak_dialog("file_exists")
+                            check = 0
+                            self.open_instructions_file(folder_name, selected_instruction[0], message)
+                        else:
+                            self.speak_dialog("no_file")
+                            check+=1
                     else:
-                        self.speak_dialog("no_file")
-                        check+=1
+                        self.speak_dialog('finished')
+                        return
                 else:
                     self.speak_dialog('finished')
                     return
