@@ -80,23 +80,23 @@ class TestSkill(unittest.TestCase):
         shutil.rmtree(cls.test_fs)
 
     def test_en_skill_init(self):
-        test_file_path = join(dirname(dirname(__file__)), "scripts", "en",
+        test_file_path = join(dirname(dirname(__file__)), "scripts", "en-us",
                               "demo1_en-us.jsonl")
         self.skill.handle_instructions(
-            Message('test', {'utterance': 'start instructions'},
+            Message('test', {'utterance': 'start instructions'},{'lang': 'en-us'},
                     {'context_key': 'Instructions'}), test_file_path)
         self.skill._start_instructions_prompt(
-            Message('test', {'utterance': 'start instructions'},
+            Message('test', {'utterance': 'start instructions'}, {'lang': 'en-us'},
                     {'context_key': 'Instructions'}))
 
     def test_uk_skill_init(self):
         test_file_path = join(dirname(dirname(__file__)), "scripts", "uk",
                               "demo1_ua.jsonl")
         self.skill.handle_instructions(
-            Message('test', {'utterance': 'запустити інструкції'},
+            Message('test', {'utterance': 'запустити інструкції'}, {'lang': 'uk-uk'},
                     {'context_key': 'інструкції'}), test_file_path)
         self.skill._start_instructions_prompt(
-            Message('test', {'utterance': 'запустити інструкції'},
+            Message('test', {'utterance': 'запустити інструкції'}, {'lang': 'uk-uk'},
                     {'context_key': 'інструкції'}))
 
 
