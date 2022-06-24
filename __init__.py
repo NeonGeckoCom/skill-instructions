@@ -51,11 +51,11 @@ class InstructionsSkill(NeonSkill):
         request_lang = message.data['lang'].split('-')[0]
         LOG.info(f"Checking lang... {os.listdir(self.script_path)}")
         if request_lang in os.listdir(self.script_path):
-            return True
+            return True, request_lang
         else:
             LOG.info(f'{message.data["lang"]} is not supported yet.')
             self.speak_dialog('finished')
-            return  False
+            return  False, request_lang
 
     def open_instructions_file(self, folder_name, selected_instruction, message):
         try:
@@ -67,40 +67,40 @@ class InstructionsSkill(NeonSkill):
         except OSError as e:
             LOG.info('File path is broken: ' + str(e))
             self.speak_dialog('finished')
-
+    
     def instruction_selection(self, message):
         instruction_name = ''
         selected_instruction = []
         check = 1
         self.Check = Check(0, '', '', '')
-        if self.lang_check(message) == True:
-            folder_name = os.path.join(self.script_path, message.data['lang'].split('-')[0])
+        lang = self.lang_check(message)
+        if lang[0]== True:
+            folder_name = os.path.join(self.script_path, lang[1])
             while (self.voc_match(instruction_name, "no") != True) or (check==4):
+                LOG.info(f"Check is ... {check}")
                 self.speak_dialog("choose")
                 instruction_name = self.get_response("instruction_names")
-                if instruction_name != NoneType:
-                    numbers = [word for word in instruction_name if word.isdigit()]
-                    numbers = ''.join(numbers)
-                    if len(numbers)==0:
-                        numbers = self.Check.is_number(str(instruction_name))
-                        numbers = numbers[1]
-                    LOG.info(f"Instructions number ... {numbers}")
-                    selected_instruction = [name for name in os.listdir(folder_name) if str(numbers) in name]
-                    LOG.info(f"Selected path ... {str(selected_instruction)}")
-                    if len(selected_instruction) != 0:
-                        self.speak_dialog("file_exists")
-                        self.open_instructions_file(folder_name, selected_instruction[0], message)
-                        return     
-                    else:
-                        self.speak_dialog("no_file")
-                        check+=1
-                else:
-                    self.speak_dialog('finished')
+                LOG.info('No voc is matched: ' + str(self.voc_match(instruction_name, "no")))
+                numbers = [word for word in instruction_name if word.isdigit()]
+                numbers = ''.join(numbers)
+                if len(numbers)==0:
+                    numbers = self.Check.is_number(str(instruction_name))
+                    numbers = numbers[1]
+                LOG.info(f"Instructions number ... {numbers}")
+                selected_instruction = [name for name in os.listdir(folder_name) if str(numbers) in name]
+                LOG.info(f"Selected path ... {str(selected_instruction)}")
+                if len(selected_instruction) != 0:
+                    self.speak_dialog("file_exists")
+                    check = 0
+                    self.open_instructions_file(folder_name, selected_instruction[0], message)
                     return
-        else:
-            self.speak_dialog('finished')
-            return
-        
+                else:
+                    self.speak_dialog("no_file")
+                    check+=1
+            else:
+                self.speak_dialog('finished')
+                return
+            
     def conversation(self, json_list, question_id, prev_answer, answer_list):
         for json_str in json_list:
             result = json.loads(json_str)
@@ -108,7 +108,8 @@ class InstructionsSkill(NeonSkill):
                 # creating class veriable for using check functions
                 self.Check = Check(question_id, prev_answer, result['question'], json_list)
 
-                # listening to user's answer, recognizing words from wav file
+                # listening to user's answer
+                # recognizing words from wav file
                 if result['answerable'] == "True":
                     # inserting user's previous answer into the question
                     if 'REPLACE' in result['question']:
@@ -180,7 +181,7 @@ class InstructionsSkill(NeonSkill):
         else:
             repeat_instr = self.ask_yesno("Do you want to stop instructions?")
             if repeat_instr == 'yes':
-                self.speak('Okey, goodbye!')
+                self.speak_dialog('finished')
             else:
                 self.instruction_selection(message)
                 return
