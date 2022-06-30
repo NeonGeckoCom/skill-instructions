@@ -80,24 +80,53 @@ class TestSkill(unittest.TestCase):
         shutil.rmtree(cls.test_fs)
 
     def test_en_skill_init(self):
+        real_askyesno = self.skill.ask_yesno
+        real_execute = self.skill.execute
+        real_instruction_selection = self.skill.instruction_selection
+        self.skill.ask_yesno = Mock(return_value="yes")
+        self.skill.execute = Mock()
+        self.skill.instruction_selection = Mock()
         test_file_path = join(dirname(dirname(__file__)), "scripts", "en",
                               "demo1_en-us.jsonl")
         self.skill.handle_instructions(
             Message('test', {'utterance': 'start instructions', 'lang': 'en-us'},
                     {'context_key': 'Instructions'}), test_file_path)
-        self.skill._start_instructions_prompt(
-            Message('test', {'utterance': 'start instructions', 'lang': 'en-us'},
-                    {'context_key': 'Instructions'}))
+        self.skill.execute.assert_called_once()
+
+        message = Message('test', {'utterance': 'start instructions',
+                                   'lang': 'en-us'},
+                          {'context_key': 'Instructions'})
+        self.skill._start_instructions_prompt(message)
+        self.skill.ask_yesno.assert_called_once_with("start")
+        self.skill.instruction_selection.assert_called_once_with(message)
+
+        self.skill.execute = real_execute
+        self.skill.ask_yesno = real_askyesno
+        self.skill.instruction_selection = real_instruction_selection
 
     def test_uk_skill_init(self):
+        real_askyesno = self.skill.ask_yesno
+        real_execute = self.skill.execute
+        real_instruction_selection = self.skill.instruction_selection
+        self.skill.ask_yesno = Mock(return_value="yes")
+        self.skill.execute = Mock()
+        self.skill.instruction_selection = Mock()
         test_file_path = join(dirname(dirname(__file__)), "scripts", "uk",
-                              "demo1_ua.jsonl")
+                              "demo1_uk.jsonl")
         self.skill.handle_instructions(
-            Message('test', {'utterance': 'запустити інструкції', 'lang': 'uk-uk'},
+            Message('test', {'utterance': 'запустити інструкції', 'lang': 'uk-ua'},
                     {'context_key': 'інструкції'}), test_file_path)
-        self.skill._start_instructions_prompt(
-            Message('test', {'utterance': 'запустити інструкції', 'lang': 'uk-uk'},
-                    {'context_key': 'інструкції'}))
+        message = Message('test', {'utterance': 'запустити інструкції',
+                                   'lang': 'uk-ua'},
+                          {'context_key': 'інструкції'})
+        self.skill._start_instructions_prompt(message)
+
+        self.skill.ask_yesno.assert_called_once_with("start")
+        self.skill.instruction_selection.assert_called_once_with(message)
+
+        self.skill.execute = real_execute
+        self.skill.ask_yesno = real_askyesno
+        self.skill.instruction_selection = real_instruction_selection
 
 
 if __name__ == '__main__':
