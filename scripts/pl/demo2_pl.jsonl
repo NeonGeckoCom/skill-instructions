@@ -1,0 +1,12 @@
+{"qa_id": "1", "question": "Przed rozpoczęciem tej procedury sprawdź bezpiecznik 24. Czy jest nienaruszony?", "answerable": "True", "answer":  {"tak": 2}}
+{"qa_id": "2", "question": "Zapoznaj się ze schematem okablowania przed następnym krokiem. Ile przewodów widzisz podłączonych do terminala? ", "answerable": "True", "answer":  {"script": 3}}
+{"qa_id": "3", "question": "Wystarczy. Ile z nich jest (są) niebieskich?", "answerable": "True", "answer":  {"script": 4}}
+{"qa_id": "4", "question": "W przypadku tego modelu przewodu upewnij się, że system sondy i połączenia z maszyną działają prawidłowo, a następnie wyłącz go. Do sterowania aparatem używaj rękawic i dwóch rąk. Czy oś nadal się obraca?", "answerable": "True", "answer":  {"nie": 5}}
+{"qa_id": "5", "question": "Włóż okrągłą uszczelkę do górnego urządzenia. Jaka jest średnica wewnętrzna pierwszej rury?", "answerable": "True", "answer":  {"script": 6}}
+{"qa_id": "6", "question": "Usłyszałem REPLACE. OK, a następnie umieść aluminiową podkładkę ślizgową na śrubie sześciokątnej 7 mm. Jakie rodzaje uszczelniaczy posiadasz?", "answerable": "True", "answer":  {"silikonowe": 7, "filip": 7, "nowe": 7}}
+{"qa_id": "7", "question": "Dobra. Pod ocynkowanym wspornikiem należy stosować tylko 100% szczeliwo silikonowe. Na której krawędzi wentylatora widać ślady zużycia lub pęknięcia?", "answerable": "True", "answer":  {"prawa": 8, "lewa": 8, "góra": 8, "dół": 8}}
+{"qa_id": "8", "question": "OK. Dopasuj wszystkie pięć części płaskimi powierzchniami do góry. Musisz umieścić obudowę pomiędzy 2 stożkami po lewej stronie oprawy. Daj mi znać, kiedy będzie na miejscu.", "answerable": "True", "answer":  {"script": 9}}
+{"qa_id": "9", "question": "Teraz dla każdej pary niebieskich przewodów dołącz miedziany klips do obu i przymocuj go do jednego z pustych kołków we wgłębieniu 8. Daj mi znać, kiedy skończysz.", "answerable": "True", "answer":  {"gotowy": 10}}
+{"qa_id": "10",	"question": "Ile klipów dołączyłeś?", "answerable": "True", "answer": {"script": 11}}
+{"qa_id": "11", "question": "Dobra. Włącz ponownie zasilanie.", "answerable": "True", "answer":  {"dobrze": 0}}
+{"qa_id": "12", "question": "Czekaj, myślałem, że powiedziałeś, że widziałeś niebieski # niebieskich przewodów? Ale dołączyłeś klipsy REPLACE? Powinien być jeden zacisk na każde dwa niebieskie przewody. Będziemy musieli zacząć od nowa…", "answerable": "True", "answer":  {"dobrze": 0}}

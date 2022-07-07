@@ -1,0 +1,9 @@
+
+skillMetadata:
+  sections:
+    - name: Instructions
+      fields:
+        - name: prompt_on_start
+          type: checkbox
+          label: Start Instructions
+          value: "true"

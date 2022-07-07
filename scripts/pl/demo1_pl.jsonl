@@ -1,0 +1,13 @@
+{"qa_id": "1", "question": "Proszę opowiedzieć mi o tej maszynie do szycia. Czy to pikowacz?", "answerable": "True", "answer": {"tak": 2}}
+{"qa_id": "2", "question": "Czy to maszyna z długim czy krótkim ramieniem?", "answerable": "True", "answer": {"długim": 3}}
+{"qa_id": "3", "question": "Czy karetka działa, czy jest zepsuta?", "answerable": "True", "answer": {"zepsuta": 4, "zepsute": 4}}
+{"qa_id": "4", "question": "Czy jego koder jest stary czy nowy?", "answerable": "True", "answer": {"stary": 5}}
+{"qa_id": "5", "question": "Zdejmij stary enkoder, odkręcając nakrętkę w kierunku przeciwnym do ruchu wskazówek zegara. Usuń enkoder, podkładki, sprężynę i śrubę montażową. Powiedz mi, kiedy to zrobiłeś.", "answerable": "True", "answer": {"gotowe": 6}}
+{"qa_id": "6", "question": "Ile części usunąłeś?", "answerable": "True", "answer": {"pięć": 7}}
+{"qa_id": "7", "question": "Teraz zainstaluj nowy enkoder. Wkręć nową śrubę mocującą do belki poprzecznej od wewnątrz, a następnie mocno dokręć. Czy jest ciasny?", "answerable": "True", "answer": {"ciasno": 8}}
+{"qa_id": "8", "question": "Teraz umieść koło karetki na końcu śruby mocującej, nakręć przeciwnakrętkę i mocno dokręć. Czy jest ciasne, czy nadal luźne?", "answerable": "True", "answer": {"ciasno": 10, "luźno": 9, "tak": 10}}
+{"qa_id": "9", "question": "powtórz 8", "answerable": "False"}
+{"qa_id": "10", "question": "Czy stoper jest wygięty czy prosty?", "answerable": "True", "answer": {"zgięty": 11, "nie" : 12, "prosto": 12}}
+{"qa_id": "11", "question": "Do wygiętej będziesz musiał użyć krótszej sprężyny.", "answerable": "True", "answer": {"ok": 13, "dobra":13}}
+{"qa_id": "12", "question": "Musisz użyć prostej sprężyny na prostym wózku.", "answerable": "True", "answer": {"ok": 13, "dobra":13}}
+{"qa_id": "13", "question": "Czy masz inną stronę w tej instrukcji?", "answerable": "True", "answer": {"tak": 0, "nie": 0} }
