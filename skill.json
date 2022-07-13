@@ -1,9 +1,9 @@
 {
     "title": "Instructions",
-    "url": "https://github.com/NeonGeckoCom/neon-skill-instructions",
-    "summary": "Skill to handle various instructions scripts",
-    "short_description": "Skill to demo Neon capabilities",
-    "description": "The instructions skill parses the script with instructions, asks user a question, waits for an answer, checks user's answer and goes to next question.",
+    "url": "https://github.com/NeonGeckoCom/skill-instructions",
+    "summary": "Neon skill for instructions reading and implementation",
+    "short_description": "Neon skill for instructions reading and implementation",
+    "description": "Reads structured instructions and guides a user through them",
     "examples": [
         "start instructions"
     ],
@@ -12,7 +12,10 @@
     "systemDeps": false,
     "requirements": {
         "python": [
-            "neon-utils>=0.5.7"
+            "neon_utils>=0.17,<2.0.0",
+            "numpy",
+            "wavfile",
+            "word2number"
         ],
         "system": {},
         "skill": []
@@ -26,18 +29,24 @@
         "arm"
     ],
     "branch": "master",
-    "license": "NeonAI License v1.0",
+    "license": "BSD-3-Clause",
     "icon": "https://0000.us/klatchat/app/files/neon_images/icons/neon_skill.png",
     "category": "Information",
     "categories": [
-        "Information"
+        "Information",
+        "Daily"
     ],
     "tags": [
-        "NeonGecko",
-        "NeonAI",
-        "Instructions"
+        "Neongecko",
+        "Neon",
+        "Instructions",
+        "Custom"
     ],
-    "skillname": "Instructions",
+    "credits": [
+        "NeonGeckoCom",
+        "NeonMariia"
+    ],
+    "skillname": "skill-instructions",
     "authorname": "NeonGeckoCom",
     "foldername": null
 }
