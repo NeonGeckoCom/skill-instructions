@@ -84,7 +84,7 @@ class TestSkill(unittest.TestCase):
         self.skill.ask_yesno = Mock(return_value="yes")
         self.skill.execute = Mock()
         self.skill.instruction_selection = Mock()
-        test_file_path = join(dirname(dirname(__file__)), "scripts", "en",
+        test_file_path = join(dirname(dirname(__file__)), "instructions", "en",
                               "demo1_en-us.jsonl")
         self.skill.handle_instructions(
             Message('test', {'utterance': 'start instructions', 'lang': 'en-us'},
@@ -109,7 +109,7 @@ class TestSkill(unittest.TestCase):
         self.skill.ask_yesno = Mock(return_value="yes")
         self.skill.execute = Mock()
         self.skill.instruction_selection = Mock()
-        test_file_path = join(dirname(dirname(__file__)), "scripts", "uk",
+        test_file_path = join(dirname(dirname(__file__)), "instructions", "uk",
                               "demo1_uk.jsonl")
         self.skill.handle_instructions(
             Message('test', {'utterance': 'запустити інструкції', 'lang': 'uk-ua'},
