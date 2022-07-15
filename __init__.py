@@ -31,7 +31,7 @@ from neon_utils.skills.neon_skill import NeonSkill, LOG
 import os
 import json
 from mycroft.skills.core import intent_file_handler
-from neon_utils.instruction_checks import Check
+from .instruction_checks import Check
 
 
 class InstructionsSkill(NeonSkill):
@@ -39,7 +39,8 @@ class InstructionsSkill(NeonSkill):
     def __init__(self):
 
         super(InstructionsSkill, self).__init__(name="InstructionsSkill")
-        self.script_path = os.path.join(os.path.dirname(__file__), 'scripts')
+        self.script_path = os.path.join(os.path.dirname(__file__),
+                                        'instructions')
         self.Check = None
         self.answer_list = []
         self.question_id = '1'
@@ -47,7 +48,7 @@ class InstructionsSkill(NeonSkill):
 
     def initialize(self):
         # When first run or prompt not dismissed, wait for load and prompt user
-        if self.settings['prompt_on_start'] and not self.server:
+        if self.settings.get('prompt_on_start'):
             self.bus.once('mycroft.ready', self._start_instructions_prompt)
 
     @intent_file_handler("run_instructions.intent")
