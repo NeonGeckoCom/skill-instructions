@@ -33,11 +33,11 @@ import pytest
 from os import mkdir
 from os.path import dirname, join, exists
 from mock import Mock
-from mycroft_bus_client import Message
 from ovos_utils.messagebus import FakeBus
-from neon_utils.configuration_utils import get_neon_local_config, get_neon_user_config
 
 from mycroft.skills.skill_loader import SkillLoader
+
+from mycroft_bus_client import Message
 
 
 class TestSkill(unittest.TestCase):
@@ -51,13 +51,11 @@ class TestSkill(unittest.TestCase):
         cls.skill = skill_loader.instance
 
         # Define a directory to use for testing
-        cls.test_fs = join(dirname(__file__), "skill_fs")
+        cls.test_fs = join(dirname(__file__), "skill")
         if not exists(cls.test_fs):
             mkdir(cls.test_fs)
 
         # Override the configuration and fs paths to use the test directory
-        cls.skill.local_config = get_neon_local_config(cls.test_fs)
-        cls.skill.user_config = get_neon_user_config(cls.test_fs)
         cls.skill.settings_write_path = cls.test_fs
         cls.skill.file_system.path = cls.test_fs
         cls.skill._init_settings()
@@ -75,22 +73,58 @@ class TestSkill(unittest.TestCase):
 
         # TODO: Put any cleanup here that runs before each test case
 
-    def tearDown(self) -> None:
-        # TODO: Put any cleanup here that runs after each test case
-        pass
-
     @classmethod
     def tearDownClass(cls) -> None:
         shutil.rmtree(cls.test_fs)
 
-    def test_00_skill_init(self):
-        # Test any parameters expected to be set in init or initialize methods
-        from neon_utils.skills import NeonSkill
+    def test_en_skill_init(self):
+        real_askyesno = self.skill.ask_yesno
+        real_execute = self.skill.execute
+        real_instruction_selection = self.skill.instruction_selection
+        self.skill.ask_yesno = Mock(return_value="yes")
+        self.skill.execute = Mock()
+        self.skill.instruction_selection = Mock()
+        test_file_path = join(dirname(dirname(__file__)), "instructions", "en",
+                              "demo1_en-us.jsonl")
+        self.skill.handle_instructions(
+            Message('test', {'utterance': 'start instructions', 'lang': 'en-us'},
+                    {'context_key': 'Instructions'}), test_file_path)
+        self.skill.execute.assert_called_once()
 
-        self.assertIsInstance(self.skill, NeonSkill)
-        # TODO: Test parameters declared in skill init/initialize here
+        message = Message('test', {'utterance': 'start instructions',
+                                   'lang': 'en-us'},
+                          {'context_key': 'Instructions'})
+        self.skill._start_instructions_prompt(message)
+        self.skill.ask_yesno.assert_called_once_with("start")
+        self.skill.instruction_selection.assert_called_once_with(message)
 
-    # TODO: Add tests for all intent handlers and support methods here
+        self.skill.execute = real_execute
+        self.skill.ask_yesno = real_askyesno
+        self.skill.instruction_selection = real_instruction_selection
+
+    def test_uk_skill_init(self):
+        real_askyesno = self.skill.ask_yesno
+        real_execute = self.skill.execute
+        real_instruction_selection = self.skill.instruction_selection
+        self.skill.ask_yesno = Mock(return_value="yes")
+        self.skill.execute = Mock()
+        self.skill.instruction_selection = Mock()
+        test_file_path = join(dirname(dirname(__file__)), "instructions", "uk",
+                              "demo1_uk.jsonl")
+        self.skill.handle_instructions(
+            Message('test', {'utterance': 'запустити інструкції', 'lang': 'uk-ua'},
+                    {'context_key': 'інструкції'}), test_file_path)
+        message = Message('test', {'utterance': 'запустити інструкції',
+                                   'lang': 'uk-ua'},
+                          {'context_key': 'інструкції'})
+        self.skill._start_instructions_prompt(message)
+
+        self.skill.ask_yesno.assert_called_once_with("start")
+        self.skill.instruction_selection.assert_called_once_with(message)
+
+        self.skill.execute = real_execute
+        self.skill.ask_yesno = real_askyesno
+        self.skill.instruction_selection = real_instruction_selection
 
 
 if __name__ == '__main__':

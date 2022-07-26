@@ -1,12 +1,12 @@
-# <img src='https://0000.us/klatchat/app/files/neon_images/icons/neon_skill.png' card_color="#FF8600" width="50" style="vertical-align:bottom">{title}
+# <img src='https://0000.us/klatchat/app/files/neon_images/icons/neon_skill.png' card_color="#FF8600" width="50" style="vertical-align:bottom">Instructions
 ## Summary
-{summary}
+Neon skill for instructions reading and implementation
 
 ## Description
-{description}
+Reads structured instructions and guides a user through them
 
 ## Examples
-{list of example utterances}
+- start instructions
 
 ## Contact Support
 Use the [link](https://neongecko.com/ContactUs) or [submit an issue on GitHub](https://help.github.com/en/articles/creating-an-issue)
@@ -14,11 +14,14 @@ Use the [link](https://neongecko.com/ContactUs) or [submit an issue on GitHub](h
 ## Credits
 
 [NeonGeckoCom](https://github.com/NeonGeckoCom)
-{author_name}
+[NeonMariia](https://github.com/NeonMariia)
 
 ## Category
-**category** {categories}
+**Information**
+Daily
 
 ## Tags
-#tag
-#tag2
+#Neongecko
+#Neon
+#Instructions
+#Custom

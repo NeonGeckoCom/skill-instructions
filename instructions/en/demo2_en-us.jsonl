@@ -1,0 +1,12 @@
+{"qa_id": "1", "question": "Before beginning this procedure, check fuse 24. Is it intact?", "answerable": "True", "answer":  {"yes": 2}}
+{"qa_id": "2", "question": "Refer to the wiring diagram before the next step. How many wires do you see connected to the terminal? ", "answerable": "True", "answer":  {"answer_num_range": 3}}
+{"qa_id": "3", "question": "That’s enough. How many of them are blue?", "answerable": "True", "answer":  {"is_even_number": 4}}
+{"qa_id": "4", "question": "For this wire model, make sure that the probe system and connections to the machine are functioning correctly, then turn it off. Use gloves and two hands to control the apparatus. Is the axle still rotating?", "answerable": "True", "answer":  {"no": 5}}
+{"qa_id": "5", "question": "Insert the round gasket into the top device. What is the inside diameter of the first pipe?", "answerable": "True", "answer":  {"is_number": 6}}
+{"qa_id": "6", "question": "I heard REPLACE. OK, then, place the aluminum slide washer on the 7mm hex bolt.  What kinds of sealant do you have?", "answerable": "True", "answer":  {"silicone": 7, "silicon": 7}}
+{"qa_id": "7", "question": "Good. Use only 100% silicone sealant below the zinc-plated bracket. Which edge of the fan shows worn spots or cracks?", "answerable": "True", "answer":  {"right": 8, "left": 8, "top": 8, "bottom": 8}}
+{"qa_id": "8", "question": "OK. Align all five parts of it with flat surfaces upward. You need to fit the housing between the 2 cones on the left of the fixture. Let me know when it is in place.", "answerable": "True", "answer":  {"not_empty": 9}}
+{"qa_id": "9", "question": "Now, for each pair of blue wires, attach a copper clip to both and fasten it to one of the empty pins in cavity 8. Let me know when you are done.", "answerable": "True", "answer":  {"done": 10}}
+{"qa_id": "10",	"question": "How many clips did you attach?", "answerable": "True", "answer": {"check_answer": 11}}
+{"qa_id": "11", "question": "Good. Turn the power back on.", "answerable": "True", "answer":  {"okay": 0}}
+{"qa_id": "12", "question": "Wait, I thought you said you saw blue# of the blue wires? But you attached REPLACE clips? There should have been one clip for each two blue wires. We’ll have to start over…  ", "answerable": "True", "answer":  {"okay": 0}}
