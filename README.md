@@ -22,6 +22,7 @@ Daily
 
 ## Tags
 #Neongecko
-#Neon
+#NeonAI
+#NeonGecko Original
 #Instructions
 #Custom

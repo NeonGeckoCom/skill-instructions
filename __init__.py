@@ -27,9 +27,12 @@
 # SOFTWARE,  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-from neon_utils.skills.neon_skill import NeonSkill, LOG
 import os
 import json
+from neon_utils.skills.neon_skill import NeonSkill
+from ovos_utils import classproperty
+from ovos_utils.log import LOG
+from ovos_utils.process_utils import RuntimeRequirements
 from mycroft.skills.core import intent_file_handler
 from .instruction_checks import Check
 
@@ -45,6 +48,18 @@ class InstructionsSkill(NeonSkill):
         self.answer_list = []
         self.question_id = '1'
         self.words_from_prev_answer = ''
+
+    @classproperty
+    def runtime_requirements(self):
+        return RuntimeRequirements(network_before_load=False,
+                                   internet_before_load=False,
+                                   gui_before_load=False,
+                                   requires_internet=False,
+                                   requires_network=False,
+                                   requires_gui=False,
+                                   no_internet_fallback=True,
+                                   no_network_fallback=True,
+                                   no_gui_fallback=True)
 
     def initialize(self):
         # When first run or prompt not dismissed, wait for load and prompt user
