@@ -38,10 +38,8 @@ from .instruction_checks import Check
 
 
 class InstructionsSkill(NeonSkill):
-
-    def __init__(self):
-
-        super(InstructionsSkill, self).__init__(name="InstructionsSkill")
+    def __init__(self, **kwargs):
+        NeonSkill.__init__(self, **kwargs)
         self.script_path = os.path.join(os.path.dirname(__file__),
                                         'instructions')
         self.Check = None
@@ -241,7 +239,3 @@ class InstructionsSkill(NeonSkill):
         if self.neon_in_request(message):
             json_list = self.json_reading(json_path)
             self.execute(json_list)
-                
-
-def create_skill():
-    return InstructionsSkill()
