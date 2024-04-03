@@ -1,5 +1,6 @@
 numpy
 wavfile
-neon_utils~=1.0
+neon-utils~=1.0
 ovos-utils~=0.0, >=0.0.28
+ovos-workshop~=0.0.15
 word2number

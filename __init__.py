@@ -33,8 +33,8 @@ from neon_utils.skills.neon_skill import NeonSkill
 from ovos_utils import classproperty
 from ovos_utils.log import LOG
 from ovos_utils.process_utils import RuntimeRequirements
-from mycroft.skills.core import intent_file_handler
-from .instruction_checks import Check
+from ovos_workshop.decorators import intent_handler
+from skill_instructions.instruction_checks import Check
 
 
 class InstructionsSkill(NeonSkill):
@@ -64,7 +64,7 @@ class InstructionsSkill(NeonSkill):
         if self.settings.get('prompt_on_start'):
             self.bus.once('mycroft.ready', self._start_instructions_prompt)
 
-    @intent_file_handler("run_instructions.intent")
+    @intent_handler("run_instructions.intent")
     def start_instructions_intent(self, message):
         LOG.info(message.data)
 
