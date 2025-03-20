@@ -1,6 +1,6 @@
 # NEON AI (TM) SOFTWARE, Software Development Kit & Application Framework
 # All trademark and other rights reserved by their respective owners
-# Copyright 2008-2022 Neongecko.com Inc.
+# Copyright 2008-2025 Neongecko.com Inc.
 # Contributors: Daniel McKnight, Guy Daniels, Elon Gasper, Richard Leeds,
 # Regina Bloomstine, Casimiro Ferreira, Andrii Pernatii, Kirill Hrymailo
 # BSD-3 License
@@ -33,15 +33,13 @@ from neon_utils.skills.neon_skill import NeonSkill
 from ovos_utils import classproperty
 from ovos_utils.log import LOG
 from ovos_utils.process_utils import RuntimeRequirements
-from mycroft.skills.core import intent_file_handler
-from .instruction_checks import Check
+from ovos_workshop.decorators import intent_handler
+from skill_instructions.instruction_checks import Check
 
 
 class InstructionsSkill(NeonSkill):
-
-    def __init__(self):
-
-        super(InstructionsSkill, self).__init__(name="InstructionsSkill")
+    def __init__(self, **kwargs):
+        NeonSkill.__init__(self, **kwargs)
         self.script_path = os.path.join(os.path.dirname(__file__),
                                         'instructions')
         self.Check = None
@@ -66,7 +64,7 @@ class InstructionsSkill(NeonSkill):
         if self.settings.get('prompt_on_start'):
             self.bus.once('mycroft.ready', self._start_instructions_prompt)
 
-    @intent_file_handler("run_instructions.intent")
+    @intent_handler("run_instructions.intent")
     def start_instructions_intent(self, message):
         LOG.info(message.data)
 
@@ -241,7 +239,3 @@ class InstructionsSkill(NeonSkill):
         if self.neon_in_request(message):
             json_list = self.json_reading(json_path)
             self.execute(json_list)
-                
-
-def create_skill():
-    return InstructionsSkill()
